@@ -7,18 +7,29 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		520AE7AE1915ABB1001E24DF /* SongCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 520AE7AD1915ABB1001E24DF /* SongCell.m */; };
+		5223AC8819122D86007D3CE1 /* PhraseAnalyzer.m in Sources */ = {isa = PBXBuildFile; fileRef = 5223AC8719122D86007D3CE1 /* PhraseAnalyzer.m */; };
 		527A5878190C26A1005DA746 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 527A5877190C26A1005DA746 /* Foundation.framework */; };
 		527A587A190C26A1005DA746 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 527A5879190C26A1005DA746 /* CoreGraphics.framework */; };
 		527A587C190C26A1005DA746 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 527A587B190C26A1005DA746 /* UIKit.framework */; };
 		527A5882190C26A2005DA746 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 527A5880190C26A2005DA746 /* InfoPlist.strings */; };
 		527A5884190C26A2005DA746 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 527A5883190C26A2005DA746 /* main.m */; };
-		527A5888190C26A2005DA746 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 527A5887190C26A2005DA746 /* AppDelegate.m */; };
 		527A588A190C26A2005DA746 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 527A5889190C26A2005DA746 /* Images.xcassets */; };
 		527A5891190C26A2005DA746 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 527A5890190C26A2005DA746 /* XCTest.framework */; };
 		527A5892190C26A2005DA746 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 527A5877190C26A1005DA746 /* Foundation.framework */; };
 		527A5893190C26A2005DA746 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 527A587B190C26A1005DA746 /* UIKit.framework */; };
 		527A589B190C26A2005DA746 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 527A5899190C26A2005DA746 /* InfoPlist.strings */; };
 		527A589D190C26A2005DA746 /* ABRepeatTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 527A589C190C26A2005DA746 /* ABRepeatTests.m */; };
+		527A58AC190C26BF005DA746 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 527A58A8190C26BF005DA746 /* AppDelegate.m */; };
+		527A58AE190C26F8005DA746 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 527A58AD190C26F8005DA746 /* Main.storyboard */; };
+		527A58B1190C299B005DA746 /* SongsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 527A58B0190C299B005DA746 /* SongsViewController.m */; };
+		529A8DB319124EDF0051DC94 /* TestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 529A8DB219124EDF0051DC94 /* TestViewController.m */; };
+		529A8DB7191250480051DC94 /* loop.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 529A8DB5191250480051DC94 /* loop.mp3 */; };
+		529A8DB8191250480051DC94 /* sine.aif in Resources */ = {isa = PBXBuildFile; fileRef = 529A8DB6191250480051DC94 /* sine.aif */; };
+		529A8DBA1912541C0051DC94 /* he.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 529A8DB91912541C0051DC94 /* he.m4a */; };
+		529A8DBF191264360051DC94 /* SongViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 529A8DBE191264360051DC94 /* SongViewController.m */; };
+		529A8DC6191298320051DC94 /* SongController.m in Sources */ = {isa = PBXBuildFile; fileRef = 529A8DC5191298320051DC94 /* SongController.m */; };
+		529A8DC919129B380051DC94 /* Phrase.m in Sources */ = {isa = PBXBuildFile; fileRef = 529A8DC819129B380051DC94 /* Phrase.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -32,6 +43,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		520AE7AC1915ABB1001E24DF /* SongCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SongCell.h; sourceTree = "<group>"; };
+		520AE7AD1915ABB1001E24DF /* SongCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SongCell.m; sourceTree = "<group>"; };
+		5223AC8619122D86007D3CE1 /* PhraseAnalyzer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhraseAnalyzer.h; sourceTree = "<group>"; };
+		5223AC8719122D86007D3CE1 /* PhraseAnalyzer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhraseAnalyzer.m; sourceTree = "<group>"; };
 		527A5874190C26A1005DA746 /* ABRepeat.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ABRepeat.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		527A5877190C26A1005DA746 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		527A5879190C26A1005DA746 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -40,14 +55,28 @@
 		527A5881190C26A2005DA746 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		527A5883190C26A2005DA746 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		527A5885190C26A2005DA746 /* ABRepeat-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ABRepeat-Prefix.pch"; sourceTree = "<group>"; };
-		527A5886190C26A2005DA746 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
-		527A5887190C26A2005DA746 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		527A5889190C26A2005DA746 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		527A588F190C26A2005DA746 /* ABRepeatTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ABRepeatTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		527A5890190C26A2005DA746 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		527A5898190C26A2005DA746 /* ABRepeatTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ABRepeatTests-Info.plist"; sourceTree = "<group>"; };
 		527A589A190C26A2005DA746 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		527A589C190C26A2005DA746 /* ABRepeatTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ABRepeatTests.m; sourceTree = "<group>"; };
+		527A58A7190C26BF005DA746 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		527A58A8190C26BF005DA746 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		527A58AD190C26F8005DA746 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
+		527A58AF190C299B005DA746 /* SongsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SongsViewController.h; sourceTree = "<group>"; };
+		527A58B0190C299B005DA746 /* SongsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SongsViewController.m; sourceTree = "<group>"; };
+		529A8DB119124EDF0051DC94 /* TestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestViewController.h; sourceTree = "<group>"; };
+		529A8DB219124EDF0051DC94 /* TestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestViewController.m; sourceTree = "<group>"; };
+		529A8DB5191250480051DC94 /* loop.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = loop.mp3; sourceTree = "<group>"; };
+		529A8DB6191250480051DC94 /* sine.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = sine.aif; sourceTree = "<group>"; };
+		529A8DB91912541C0051DC94 /* he.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = he.m4a; sourceTree = "<group>"; };
+		529A8DBD191264360051DC94 /* SongViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SongViewController.h; sourceTree = "<group>"; };
+		529A8DBE191264360051DC94 /* SongViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SongViewController.m; sourceTree = "<group>"; };
+		529A8DC4191298320051DC94 /* SongController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SongController.h; sourceTree = "<group>"; };
+		529A8DC5191298320051DC94 /* SongController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SongController.m; sourceTree = "<group>"; };
+		529A8DC719129B380051DC94 /* Phrase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Phrase.h; sourceTree = "<group>"; };
+		529A8DC819129B380051DC94 /* Phrase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Phrase.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -107,9 +136,9 @@
 		527A587D190C26A1005DA746 /* ABRepeat */ = {
 			isa = PBXGroup;
 			children = (
-				527A5886190C26A2005DA746 /* AppDelegate.h */,
-				527A5887190C26A2005DA746 /* AppDelegate.m */,
+				527A58A6190C26BF005DA746 /* Classes */,
 				527A5889190C26A2005DA746 /* Images.xcassets */,
+				529A8DB4191250480051DC94 /* Sounds */,
 				527A587E190C26A2005DA746 /* Supporting Files */,
 			);
 			path = ABRepeat;
@@ -142,6 +171,64 @@
 				527A5899190C26A2005DA746 /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		527A58A6190C26BF005DA746 /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				527A58A7190C26BF005DA746 /* AppDelegate.h */,
+				527A58A8190C26BF005DA746 /* AppDelegate.m */,
+				527A58A9190C26BF005DA746 /* Controllers */,
+				527A58AA190C26BF005DA746 /* Models */,
+				527A58AB190C26BF005DA746 /* Views */,
+			);
+			path = Classes;
+			sourceTree = "<group>";
+		};
+		527A58A9190C26BF005DA746 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				527A58AF190C299B005DA746 /* SongsViewController.h */,
+				527A58B0190C299B005DA746 /* SongsViewController.m */,
+				529A8DBD191264360051DC94 /* SongViewController.h */,
+				529A8DBE191264360051DC94 /* SongViewController.m */,
+				529A8DB119124EDF0051DC94 /* TestViewController.h */,
+				529A8DB219124EDF0051DC94 /* TestViewController.m */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		527A58AA190C26BF005DA746 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				5223AC8619122D86007D3CE1 /* PhraseAnalyzer.h */,
+				5223AC8719122D86007D3CE1 /* PhraseAnalyzer.m */,
+				529A8DC4191298320051DC94 /* SongController.h */,
+				529A8DC5191298320051DC94 /* SongController.m */,
+				529A8DC719129B380051DC94 /* Phrase.h */,
+				529A8DC819129B380051DC94 /* Phrase.m */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		527A58AB190C26BF005DA746 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				527A58AD190C26F8005DA746 /* Main.storyboard */,
+				520AE7AC1915ABB1001E24DF /* SongCell.h */,
+				520AE7AD1915ABB1001E24DF /* SongCell.m */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		529A8DB4191250480051DC94 /* Sounds */ = {
+			isa = PBXGroup;
+			children = (
+				529A8DB5191250480051DC94 /* loop.mp3 */,
+				529A8DB6191250480051DC94 /* sine.aif */,
+				529A8DB91912541C0051DC94 /* he.m4a */,
+			);
+			path = Sounds;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -219,8 +306,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				529A8DB7191250480051DC94 /* loop.mp3 in Resources */,
+				527A58AE190C26F8005DA746 /* Main.storyboard in Resources */,
 				527A5882190C26A2005DA746 /* InfoPlist.strings in Resources */,
+				529A8DBA1912541C0051DC94 /* he.m4a in Resources */,
 				527A588A190C26A2005DA746 /* Images.xcassets in Resources */,
+				529A8DB8191250480051DC94 /* sine.aif in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -239,8 +330,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				527A5888190C26A2005DA746 /* AppDelegate.m in Sources */,
+				5223AC8819122D86007D3CE1 /* PhraseAnalyzer.m in Sources */,
+				529A8DC6191298320051DC94 /* SongController.m in Sources */,
+				527A58B1190C299B005DA746 /* SongsViewController.m in Sources */,
+				527A58AC190C26BF005DA746 /* AppDelegate.m in Sources */,
+				529A8DBF191264360051DC94 /* SongViewController.m in Sources */,
 				527A5884190C26A2005DA746 /* main.m in Sources */,
+				529A8DC919129B380051DC94 /* Phrase.m in Sources */,
+				529A8DB319124EDF0051DC94 /* TestViewController.m in Sources */,
+				520AE7AE1915ABB1001E24DF /* SongCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -360,6 +458,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "ABRepeat/ABRepeat-Prefix.pch";
 				INFOPLIST_FILE = "ABRepeat/ABRepeat-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -373,6 +472,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "ABRepeat/ABRepeat-Prefix.pch";
 				INFOPLIST_FILE = "ABRepeat/ABRepeat-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -437,6 +537,7 @@
 				527A58A2190C26A2005DA746 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		527A58A3190C26A2005DA746 /* Build configuration list for PBXNativeTarget "ABRepeatTests" */ = {
 			isa = XCConfigurationList;
@@ -445,6 +546,7 @@
 				527A58A5190C26A2005DA746 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
