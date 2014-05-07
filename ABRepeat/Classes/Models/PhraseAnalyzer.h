@@ -8,8 +8,22 @@
 
 #import <Foundation/Foundation.h>
 
+@protocol PhraseAnalyzerDelegate;
+
 @interface PhraseAnalyzer : NSObject
 
-- (NSArray *)phrasesFromSongURL:(NSURL *)songURL;
+@property (nonatomic, weak) id <PhraseAnalyzerDelegate> delegate;
+
+- (id)initWithDelegate:(id)delegate;
+
+- (void)startPhraseAnalyzeFromSongURL:(NSURL *)songURL;
+- (void)cancelPhraseAnalyze;
+
+@end
+
+@protocol PhraseAnalyzerDelegate <NSObject>
+
+- (void)phraseAnalyzerDidChangeProgress:(CGFloat)progress;
+- (void)phraseAnalyzerDidFinish:(NSArray *)phrases;
 
 @end

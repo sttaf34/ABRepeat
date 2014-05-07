@@ -9,11 +9,15 @@
 #import "SongsViewController.h"
 #import "SongViewController.h"
 #import <MediaPlayer/MediaPlayer.h>
+#import "PhraseAnalyzer.h"
+#import "MRProgress.h"
 
-@interface SongsViewController ()
+@interface SongsViewController () <PhraseAnalyzerDelegate>
 
-@property (nonatomic, retain, readwrite) NSArray * collections;
-@property (nonatomic, retain, readwrite) NSArray * collectionSections;
+@property (nonatomic, copy) NSArray *collections;
+@property (nonatomic, copy) NSArray *collectionSections;
+@property (nonatomic, strong) PhraseAnalyzer *phraseAnalyzer;
+@property (nonatomic, strong) MRProgressOverlayView *progressView;
 
 @end
 
@@ -22,21 +26,20 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
+    self.phraseAnalyzer = [[PhraseAnalyzer alloc] initWithDelegate:self];
+
     MPMediaQuery *mediaQuery = [MPMediaQuery songsQuery];
     self.collections = mediaQuery.collections;
     self.collectionSections = mediaQuery.collectionSections;
 }
 
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([segue.identifier isEqualToString:@"ToSong"]) {
-        NSIndexPath *indexPath = (NSIndexPath *)sender;
-        MPMediaQuerySection *section = self.collectionSections[indexPath.section];
-        MPMediaItemCollection *mediaItemCollection = self.collections[section.range.location + indexPath.row];
-        MPMediaItem *mediaItem = [mediaItemCollection representativeItem];
-        SongViewController *songViewController = [segue destinationViewController];
-        songViewController.songURL = [mediaItem valueForProperty:MPMediaItemPropertyAssetURL];
-        songViewController.hidesBottomBarWhenPushed = YES;
+        SongViewController *viewController = [segue destinationViewController];
+        viewController.phrases = (NSArray *)sender;
+        NSIndexPath *path = [NSIndexPath indexPathForRow:0 inSection:0];
+        NSURL *songURL = [self mediaItemURL:path];
+        viewController.songURL = songURL;
     }
 }
 
@@ -44,7 +47,18 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    [self performSegueWithIdentifier:@"ToSong" sender:indexPath];
+
+    MPMediaItem *mediaItem = [self mediaItem:indexPath];
+    NSURL *songURL = [mediaItem valueForProperty:MPMediaItemPropertyAssetURL];
+    [self.phraseAnalyzer startPhraseAnalyzeFromSongURL:songURL];
+
+    self.progressView = [MRProgressOverlayView new];
+    self.progressView.mode = MRProgressOverlayViewModeDeterminateCircular;
+    self.progressView.stopBlock = ^(MRProgressOverlayView *view) {
+        [view dismiss:YES];
+    };
+    [self.view.window addSubview:self.progressView];
+    [self.progressView show:YES];
 }
 
 #pragma mark - TableViewDataSource
@@ -66,13 +80,34 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *CellIdentifier = @"Cell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
+    MPMediaItem *mediaItem = [self mediaItem:indexPath];
+    cell.textLabel.text = [mediaItem valueForProperty:MPMediaItemPropertyTitle];
+    return cell;
+}
 
+#pragma mark - PhraseAnalyzerDelegate
+
+- (void)phraseAnalyzerDidChangeProgress:(CGFloat)progress {
+
+}
+
+- (void)phraseAnalyzerDidFinish:(NSArray *)phrases {
+    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+        [self.progressView dismiss:YES];
+        [self performSegueWithIdentifier:@"ToSong" sender:phrases];
+    }];
+}
+
+#pragma mark - Helper
+
+- (MPMediaItem *)mediaItem:(NSIndexPath *)indexPath {
     MPMediaQuerySection *section = self.collectionSections[indexPath.section];
     MPMediaItemCollection *mediaItemCollection = self.collections[section.range.location + indexPath.row];
-    MPMediaItem *mediaItem = [mediaItemCollection representativeItem];
-    cell.textLabel.text = [mediaItem valueForProperty:MPMediaItemPropertyTitle];
+    return [mediaItemCollection representativeItem];
+}
 
-    return cell;
+- (NSURL *)mediaItemURL:(NSIndexPath *)indexPath {
+    return [[self mediaItem:indexPath] valueForProperty:MPMediaItemPropertyAssetURL];
 }
 
 @end

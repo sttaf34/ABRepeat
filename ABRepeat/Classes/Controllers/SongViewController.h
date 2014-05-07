@@ -11,5 +11,6 @@
 @interface SongViewController : UIViewController
 
 @property (nonatomic, strong) NSURL *songURL;
+@property (nonatomic, strong) NSArray *phrases;
 
 @end

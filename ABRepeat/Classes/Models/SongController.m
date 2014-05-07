@@ -8,7 +8,6 @@
 
 #import "SongController.h"
 #import <AVFoundation/AVFoundation.h>
-#import "PhraseAnalyzer.h"
 #import "Phrase.h"
 
 const NSUInteger SongControllerCurrentPlayingIndexStop = NSUIntegerMax;
@@ -29,11 +28,12 @@ const CGFloat kPlaySpeedDistance = 0.1;
 
 @implementation SongController
 
-- (id)initWithDelegate:(id)delegate songURL:(NSURL *)songURL {
+- (id)initWithDelegate:(id)delegate songURL:(NSURL *)songURL phrases:(NSArray *)phrases {
     self = [super init];
     if (self) {
         _delegate = delegate;
-        _songURL = songURL;
+        _songURL  = songURL;
+        _phrases  = phrases;
         _playingIndex = SongControllerCurrentPlayingIndexStop;
 
         NSError *error;
@@ -42,23 +42,18 @@ const CGFloat kPlaySpeedDistance = 0.1;
         _player.delegate = self;
         _player.numberOfLoops = 0;
         _player.enableRate = YES;
+
+        self.timer = [NSTimer scheduledTimerWithTimeInterval:0.01f
+                                                      target:self
+                                                    selector:@selector(checkPlayingIndex)
+                                                    userInfo:nil
+                                                     repeats:YES];
     }
     return self;
 }
 
 - (void)dealloc {
     [self.timer invalidate];
-}
-
-- (void)startSongAnalyze {
-    PhraseAnalyzer *analyzer = [[PhraseAnalyzer alloc] init];
-    self.phrases = [analyzer phrasesFromSongURL:self.songURL];
-
-    self.timer = [NSTimer scheduledTimerWithTimeInterval:0.01f
-                                                  target:self
-                                                selector:@selector(checkPlayingIndex)
-                                                userInfo:nil
-                                                 repeats:YES];
 }
 
 #pragma mark - Player

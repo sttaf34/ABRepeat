@@ -17,8 +17,7 @@ extern const NSUInteger SongControllerCurrentPlayingIndexStop;
 @property (nonatomic, strong, readonly) NSArray *phrases;
 @property (nonatomic, assign, readonly) NSUInteger playingIndex;
 
-- (id)initWithDelegate:(id)delegate songURL:(NSURL *)URL;
-- (void)startSongAnalyze;
+- (id)initWithDelegate:(id)delegate songURL:(NSURL *)URL phrases:(NSArray *)phrases;
 
 - (void)playPhraseAtIndex:(NSUInteger)index;
 - (void)stop;

@@ -32,8 +32,7 @@
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
 
-    self.songController = [[SongController alloc] initWithDelegate:self songURL:self.songURL];
-    [self.songController startSongAnalyze];
+    self.songController = [[SongController alloc] initWithDelegate:self songURL:self.songURL phrases:self.phrases];
     [self.songController playPhraseAtIndex:0];
 
     [self updateVisibleCells];
