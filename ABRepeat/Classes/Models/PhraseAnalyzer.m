@@ -8,8 +8,10 @@
 
 #import "PhraseAnalyzer.h"
 #import <AudioToolbox/AudioToolbox.h>
-#import "Phrase.h"
 #import "PhraseAnalyzeOperation.h"
+#import "SongController.h"
+#import "Song.h"
+#import "Phrase.h"
 
 @interface PhraseAnalyzer () <PhraseAnalyzeOperationDelegate>
 
@@ -28,9 +30,9 @@
     return self;
 }
 
-- (void)startPhraseAnalyzeFromSongURL:(NSURL *)songURL {
-    PhraseAnalyzeOperation *operation = [[PhraseAnalyzeOperation alloc] initWithURL:songURL delegate:self];
-    [self.operationQueue addOperation:operation];
+- (void)startPhraseAnalyzeFromMediaItem:(MPMediaItem *)mediaItem {
+    PhraseAnalyzeOperation *opetation = [[PhraseAnalyzeOperation alloc] initWithMediaItem:mediaItem delegate:self];
+    [self.operationQueue addOperation:opetation];
 }
 
 - (void)cancelPhraseAnalyze {
@@ -40,11 +42,21 @@
 #pragma mark - PhraseAnalyzeOperationDelegate
 
 - (void)phraseAnalyzeOperationDidChangeProgress:(CGFloat)progress {
-    [self.delegate phraseAnalyzerDidChangeProgress:progress];
+    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+        [self.delegate phraseAnalyzerDidChangeProgress:progress];
+    }];
 }
 
-- (void)phraseAnalyzeOperationDidFinish:(NSArray *)phrases {
-    [self.delegate phraseAnalyzerDidFinish:phrases];
+- (void)phraseAnalyzeOperationDidFinish:(Song *)song {
+    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+        [self.delegate phraseAnalyzerDidFinish:song];
+    }];
+}
+
+- (void)phraseAnalyzeOperationDidError {
+    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+        [self.delegate phraseAnalyzerDidError];
+    }];
 }
 
 @end

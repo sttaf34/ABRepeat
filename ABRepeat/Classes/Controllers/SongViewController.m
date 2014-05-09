@@ -7,13 +7,14 @@
 //
 
 #import "SongViewController.h"
-#import "SongController.h"
 #import "SongCell.h"
-#import "Phrase.h"
+#import "SongPlayer.h"
+#import "Phrase+Helper.h"
+#import "Song+Helper.h"
 
-@interface SongViewController () <SongControllerDelegate, UITableViewDataSource, UITableViewDelegate>
+@interface SongViewController () <SongPlayerDelegate, UITableViewDataSource, UITableViewDelegate>
 
-@property (nonatomic, strong) SongController *songController;
+@property (nonatomic, strong) SongPlayer *songPlayer;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIButton *repeatButton;
 @property (weak, nonatomic) IBOutlet UIButton *playButton;
@@ -32,34 +33,34 @@
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
 
-    self.songController = [[SongController alloc] initWithDelegate:self songURL:self.songURL phrases:self.phrases];
-    [self.songController playPhraseAtIndex:0];
+    self.songPlayer = [[SongPlayer alloc] initWithDelegate:self song:self.song];
+    [self.songPlayer playPhraseAtIndex:0];
 
     [self updateVisibleCells];
     [self updateButtonsAndLabelsStatus];
 }
 
 - (void)dealloc {
-    [self.songController stop];
+    [self.songPlayer stop];
 }
 
 - (void)updateButtonsAndLabelsStatus {
-    if (self.songController.isRepeat) {
+    if (self.songPlayer.isRepeat) {
         self.repeatButton.alpha = 1.0;
     } else {
         self.repeatButton.alpha = 0.2;
     }
-    self.playButton.selected = self.songController.isPlay;
-    self.speedMinusButton.enabled = self.songController.isEnabledSpeedDown;
-    self.speedPlusButton.enabled = self.songController.isEnabledSpeedUp;
+    self.playButton.selected = self.songPlayer.isPlay;
+    self.speedMinusButton.enabled = self.songPlayer.isEnabledSpeedDown;
+    self.speedPlusButton.enabled = self.songPlayer.isEnabledSpeedUp;
 
-    self.playSpeedLabel.text = [NSString stringWithFormat:@"%d%%", self.songController.playSpeed];
+    self.playSpeedLabel.text = [NSString stringWithFormat:@"%d%%", self.songPlayer.playSpeed];
 }
 
 #pragma mark - TableViewDelegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    [self.songController playPhraseAtIndex:indexPath.row];
+    [self.songPlayer playPhraseAtIndex:indexPath.row];
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     [self updateButtonsAndLabelsStatus];
 }
@@ -71,7 +72,7 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return self.songController.phrases.count;
+    return self.song.sortedPhrases.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -90,9 +91,9 @@
 }
 
 - (void)updateCell:(SongCell *)cell atIndexPath:(NSIndexPath *)indexPath {
-    Phrase *phrase = self.songController.phrases[indexPath.row];
-    cell.timeLabel.text = [NSString stringWithFormat:@"%0.2f", phrase.startTime];
-    [cell playingIndicatorWorking:(indexPath.row == self.songController.playingIndex)];
+    Phrase *phrase = self.song.sortedPhrases[indexPath.row];
+    cell.timeLabel.text = [NSString stringWithFormat:@"%02d:%02d.%02d", phrase.startTimeMinute, phrase.startTimeSecond, phrase.startTime10Millisecond];
+    [cell playingIndicatorWorking:(indexPath.row == self.songPlayer.playingIndex)];
 }
 
 - (void)updateVisibleCells {
@@ -101,35 +102,41 @@
     }
 }
 
-#pragma mark - SongControllerDelegate
+#pragma mark - SongPlayerDelegate
 
-- (void)songControllerChangePhraseAtIndex:(NSUInteger)index {
+- (void)songPlayerChangePhraseAtIndex:(NSUInteger)index {
     [self updateVisibleCells];
 }
 
-- (void)songControllerPlayerStop {
+- (void)songPlayerPlayerStop {
     [self updateButtonsAndLabelsStatus];
+}
+
+- (void)songPlayerChangeCurrentTime:(CGFloat)currentTime {
+    int minute = (int)currentTime / 60;
+    int second = (int)currentTime % 60;
+    self.playTimeLabel.text = [NSString stringWithFormat:@"%02d:%02d", minute, second];
 }
 
 #pragma mark - ButtonCallback
 
 - (IBAction)repeatButtonCallback:(id)sender {
-    [self.songController repeatToggle];
+    [self.songPlayer repeatToggle];
     [self updateButtonsAndLabelsStatus];
 }
 
 - (IBAction)playButtonCallback:(id)sender {
-    [self.songController playToggle];
+    [self.songPlayer playToggle];
     [self updateButtonsAndLabelsStatus];
 }
 
 - (IBAction)speedMinusButtonCallback:(id)sender {
-    [self.songController speedDown];
+    [self.songPlayer speedDown];
     [self updateButtonsAndLabelsStatus];
 }
 
 - (IBAction)speedPlusButtonCallback:(id)sender {
-    [self.songController speedUp];
+    [self.songPlayer speedUp];
     [self updateButtonsAndLabelsStatus];
 }
 

@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+@class Song;
+
 @protocol PhraseAnalyzerDelegate;
 
 @interface PhraseAnalyzer : NSObject
@@ -16,7 +18,7 @@
 
 - (id)initWithDelegate:(id)delegate;
 
-- (void)startPhraseAnalyzeFromSongURL:(NSURL *)songURL;
+- (void)startPhraseAnalyzeFromMediaItem:(MPMediaItem *)mediaItem;
 - (void)cancelPhraseAnalyze;
 
 @end
@@ -24,6 +26,7 @@
 @protocol PhraseAnalyzerDelegate <NSObject>
 
 - (void)phraseAnalyzerDidChangeProgress:(CGFloat)progress;
-- (void)phraseAnalyzerDidFinish:(NSArray *)phrases;
+- (void)phraseAnalyzerDidFinish:(Song *)song;
+- (void)phraseAnalyzerDidError;
 
 @end

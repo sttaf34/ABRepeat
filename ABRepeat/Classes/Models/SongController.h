@@ -2,43 +2,19 @@
 //  SongController.h
 //  ABRepeat
 //
-//  Created by Shinichi Kawamura on 5/1/14.
+//  Created by Shinichi Kawamura on 5/9/14.
 //  Copyright (c) 2014 Shinichi Kawamura. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
-
-extern const NSUInteger SongControllerCurrentPlayingIndexStop;
-
-@protocol SongControllerDelegate;
+#import "Song+Helper.h"
+#import "Phrase+Helper.h"
 
 @interface SongController : NSObject
 
-@property (nonatomic, strong, readonly) NSArray *phrases;
-@property (nonatomic, assign, readonly) NSUInteger playingIndex;
++ (Song *)createSongAndPhrasesFromPhraseStartTimes:(NSArray *)phraseStartTimes
+                                         mediaItem:(MPMediaItem *)mediaItem;
 
-- (id)initWithDelegate:(id)delegate songURL:(NSURL *)URL phrases:(NSArray *)phrases;
-
-- (void)playPhraseAtIndex:(NSUInteger)index;
-- (void)stop;
-
-- (BOOL)playToggle;
-- (BOOL)isPlay;
-
-- (BOOL)repeatToggle;
-- (BOOL)isRepeat;
-
-- (void)speedUp;
-- (void)speedDown;
-- (BOOL)isEnabledSpeedUp;
-- (BOOL)isEnabledSpeedDown;
-- (NSUInteger)playSpeed;      // 標準スピードならば100を返す
-
-@end
-
-@protocol SongControllerDelegate <NSObject>
-
-- (void)songControllerPlayerStop;
-- (void)songControllerChangePhraseAtIndex:(NSUInteger)index;
++ (Song *)findSongByMediaItem:(MPMediaItem *)mediaItem;
 
 @end

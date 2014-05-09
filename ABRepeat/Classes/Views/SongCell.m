@@ -72,8 +72,8 @@ static const CGFloat kAnimationSettingRandomDistance = 0.05;
 
             [bar.layer removeAllAnimations];
 
-            [UIView animateWithDuration:[self randomDuration]
-                                  delay:[self randomDelay]
+            [UIView animateWithDuration:kAnimationSettingMinDuration
+                                  delay:kAnimationSettingMinDelay
                                 options:UIViewAnimationOptionCurveLinear
                              animations:^{
                 bar.frame = CGRectMake(bar.frame.origin.x, kBarMaxY, bar.frame.size.width, kBarMinHeight);

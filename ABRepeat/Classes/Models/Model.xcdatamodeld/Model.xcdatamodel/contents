@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="5064" systemVersion="12F45" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
+    <entity name="Phrase" representedClassName="Phrase" syncable="YES">
+        <attribute name="startTime" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <relationship name="song" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Song" inverseName="phrases" inverseEntity="Song" syncable="YES"/>
+    </entity>
+    <entity name="Song" representedClassName="Song" syncable="YES">
+        <attribute name="songURL" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="phrases" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Phrase" inverseName="song" inverseEntity="Phrase" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="Phrase" positionX="151" positionY="-0" width="128" height="73"/>
+        <element name="Song" positionX="-45" positionY="0" width="128" height="90"/>
+    </elements>
+</model>

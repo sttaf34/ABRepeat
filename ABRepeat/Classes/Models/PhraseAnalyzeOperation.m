@@ -8,7 +8,9 @@
 
 #import "PhraseAnalyzeOperation.h"
 #import <AudioToolbox/AudioToolbox.h>
+#import "SongController.h"
 #import "Phrase.h"
+#import "Song.h"
 
 static const NSInteger kTempSoundFileSampleRate = 10000;
 static const NSInteger kTempSoundFileReadFrame = 1024;
@@ -16,66 +18,82 @@ static const NSInteger kSoundExistenceBoundary = 100;
 static const NSInteger kSoundExistenceAverageReadPackets = 100;
 static const NSInteger k1SecondResolution = kTempSoundFileSampleRate / kSoundExistenceAverageReadPackets;
 
+static const CGFloat kProgressAfterCreateTempPCM = 0.9;
+
 @interface PhraseAnalyzeOperation ()
 
-@property (nonatomic, strong) NSURL *songURL;
+@property (nonatomic, strong) MPMediaItem *mediaItem;
 
 @end
 
 @implementation PhraseAnalyzeOperation
 
-- (id)initWithURL:(NSURL *)songURL delegate:(id)delegate {
+- (id)initWithMediaItem:(MPMediaItem *)mediaItem delegate:(id)delegate {
     self = [super init];
     if (self) {
-        _songURL  = songURL;
-        _delegate = delegate;
+        _mediaItem = mediaItem;
+        _delegate  = delegate;
     }
     return self;
 }
 
-// TODO: 受け取った音楽ファイルが既にPCMな場合の処理
-// TODO: これらの処理は全部時間がかかるので別スレッドにする
-// TODO: 各CoreAudio系の関数のエラー処理が必要
+// TODO: 受け取った音楽ファイルが既にPCMな場合の処理があると良いかも
 - (void)main {
-    NSURL *tempPCMFileURL = [self createTempPCMData:self.songURL];
+    NSURL *songURL = [self.mediaItem valueForProperty:MPMediaItemPropertyAssetURL];
+    Song *song = [self analyzedSongOrNil:songURL];
+    if (song) {
+        [self.delegate phraseAnalyzeOperationDidFinish:song];
+    } else if (!song && !self.isCancelled) {
+        [self.delegate phraseAnalyzeOperationDidError];
+    }
+}
+
+- (Song *)analyzedSongOrNil:(NSURL *)songURL {
+    NSURL *tempPCMFileURL = [self createTempPCMData:songURL];
+    if (!tempPCMFileURL || self.isCancelled) return nil;
+
+    [self.delegate phraseAnalyzeOperationDidChangeProgress:kProgressAfterCreateTempPCM];
     NSArray *existenceArray = [self soundExistenceArrayPer10Millisecond:tempPCMFileURL];
-    NSArray *phraseBeginTimes = [self phraseBeginTimesFromSoundExistenceArray:existenceArray];
-    CGFloat playTime = (CGFloat)existenceArray.count / k1SecondResolution;
-    NSArray *phrases = [self phrasesFromPhraseBeginTimes:phraseBeginTimes songPlayTime:playTime];
-    [self.delegate phraseAnalyzeOperationDidFinish:phrases];
+    if (!existenceArray || self.isCancelled) return nil;
+
+    [self.delegate phraseAnalyzeOperationDidChangeProgress:0.93];
+    NSArray *phraseStartTimes = [self phraseStartTimesFromSoundExistenceArray:existenceArray];
+
+    [self.delegate phraseAnalyzeOperationDidChangeProgress:0.96];
+    Song *song = [SongController createSongAndPhrasesFromPhraseStartTimes:phraseStartTimes mediaItem:self.mediaItem];
+    [self.delegate phraseAnalyzeOperationDidChangeProgress:0.9999];
+
+    return song;
 }
 
 - (NSURL *)createTempPCMData:(NSURL *)songURL {
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateFormat:@"HH:mm:ss.SSS"];
-    NSString *fileName = [NSString stringWithFormat:@"%@.wav", [dateFormatter stringFromDate:[NSDate date]]];
-    NSURL *tempFileURL = [NSURL fileURLWithPath:[NSTemporaryDirectory() stringByAppendingPathComponent:fileName]];
+    NSURL *tempFileURL = [self tempWAVFileURL];
+    AudioStreamBasicDescription outputFormat = [self tempWAVFileFormat];
+    OSStatus error;
+    ExtAudioFileRef infile, outfile = NULL;
 
-    // 16ビット・モノラルな設定
-    AudioStreamBasicDescription outputFormat;
-    outputFormat.mFormatID			= kAudioFormatLinearPCM;
-    outputFormat.mFormatFlags		= kLinearPCMFormatFlagIsSignedInteger | kLinearPCMFormatFlagIsPacked;
-    outputFormat.mSampleRate        = kTempSoundFileSampleRate;
-    outputFormat.mFramesPerPacket	= 1;
-    outputFormat.mChannelsPerFrame	= 1;
-    outputFormat.mBitsPerChannel    = 16;
-    outputFormat.mBytesPerPacket    = 2;
-    outputFormat.mBytesPerFrame		= 2;
-    outputFormat.mReserved			= 0;
+    error = ExtAudioFileOpenURL((__bridge CFURLRef)songURL, &infile);
+    if (error) goto ERROR_HANDLING;
 
-    ExtAudioFileRef infile, outfile;
-    ExtAudioFileOpenURL((__bridge CFURLRef)songURL, &infile);
-    ExtAudioFileSetProperty(infile,
-                            kExtAudioFileProperty_ClientDataFormat,
-                            sizeof(AudioStreamBasicDescription),
-                            &outputFormat);
+    error = ExtAudioFileSetProperty(infile,
+                                    kExtAudioFileProperty_ClientDataFormat,
+                                    sizeof(AudioStreamBasicDescription),
+                                    &outputFormat);
+    if (error) goto ERROR_HANDLING;
 
-    ExtAudioFileCreateWithURL((__bridge CFURLRef)tempFileURL,
-                              kAudioFileWAVEType,
-                              &outputFormat,
-                              NULL,
-                              kAudioFileFlags_EraseFile,
-                              &outfile);
+    error = ExtAudioFileCreateWithURL((__bridge CFURLRef)tempFileURL,
+                                      kAudioFileWAVEType,
+                                      &outputFormat,
+                                      NULL,
+                                      kAudioFileFlags_EraseFile,
+                                      &outfile);
+ERROR_HANDLING:
+    if (error) {
+        NSLog(@"%s %d", __PRETTY_FUNCTION__, __LINE__);
+        ExtAudioFileDispose(infile);
+        ExtAudioFileDispose(outfile);
+        return nil;
+    }
 
     UInt32 readFrameSize = kTempSoundFileReadFrame;
     UInt32 bufferSize = sizeof(char) * readFrameSize * outputFormat.mBytesPerPacket;
@@ -87,48 +105,92 @@ static const NSInteger k1SecondResolution = kTempSoundFileSampleRate / kSoundExi
     audioBufferList.mBuffers[0].mDataByteSize = bufferSize;
     audioBufferList.mBuffers[0].mData = buffer;
 
+    // ファイル変換の途中経過を通知する用
+    // TODO: 計算式が分からないのでマジックナンバーになっているのを何とかする
+    UInt64 fileLengthFrames = 0;
+    UInt32 size = sizeof(SInt64);
+    ExtAudioFileGetProperty(infile, kExtAudioFileProperty_FileLengthFrames, &size, &fileLengthFrames);
+    UInt64 aboutLoopCount = fileLengthFrames / 4500;
+
+    BOOL isSuccess = NO;
+    int currentLoopCount = 0;
     while (1) {
+        currentLoopCount++;
+        float progress = (float)currentLoopCount / aboutLoopCount * kProgressAfterCreateTempPCM;
+        [self.delegate phraseAnalyzeOperationDidChangeProgress:progress];
+
+        if (self.isCancelled) break;
+
         readFrameSize = kTempSoundFileReadFrame;
-        ExtAudioFileRead(infile, &readFrameSize, &audioBufferList);
-        if (readFrameSize == 0) break;
-        ExtAudioFileWrite(outfile,
-                          readFrameSize,
-                          &audioBufferList);
+        error = ExtAudioFileRead(infile, &readFrameSize, &audioBufferList);
+        if (error) break;
+
+        if (readFrameSize == 0) {
+            isSuccess = YES;
+            break;
+        }
+
+        error = ExtAudioFileWrite(outfile, readFrameSize, &audioBufferList);
+        if (error) break;
     }
 
     ExtAudioFileDispose(infile);
     ExtAudioFileDispose(outfile);
     free(buffer);
 
+    if (!isSuccess) {
+        NSLog(@"%s %d", __PRETTY_FUNCTION__, __LINE__);
+        return nil;
+    }
     return tempFileURL;
 }
 
 - (NSArray *)soundExistenceArrayPer10Millisecond:(NSURL *)PCMFileURL {
     NSMutableArray *soundExistenceArray = [NSMutableArray array];
-
-    AudioFileID audioFileID;
-    AudioFileOpenURL((__bridge CFURLRef)PCMFileURL,
-                     kAudioFileReadPermission,
-                     kAudioFileWAVEType,
-                     &audioFileID);
-
-    UInt64 packetCount;
+    OSStatus error;
+    UInt64 packetCount = 0;
     UInt32 size = sizeof(UInt64);
-    AudioFileGetProperty (audioFileID,
-                          kAudioFilePropertyAudioDataPacketCount,
-                          &size,
-                          &packetCount);
+
+    AudioFileID audioFileID = NULL;
+    error = AudioFileOpenURL((__bridge CFURLRef)PCMFileURL,
+                             kAudioFileReadPermission,
+                             kAudioFileWAVEType,
+                             &audioFileID);
+    if (error) goto ERROR_HANDLING;
+
+    error = AudioFileGetProperty(audioFileID,
+                                 kAudioFilePropertyAudioDataPacketCount,
+                                 &size,
+                                 &packetCount);
+    if (error) goto ERROR_HANDLING;
+
+ERROR_HANDLING:
+    if (error) {
+        NSLog(@"%s %d", __PRETTY_FUNCTION__, __LINE__);
+        AudioFileClose(audioFileID);
+        return nil;
+    }
 
     UInt32 ioNumPackets = kSoundExistenceAverageReadPackets;
     short buffer[kSoundExistenceAverageReadPackets] = {0};
     for (int i = 0; i < packetCount; i += kSoundExistenceAverageReadPackets) {
-        AudioFileReadPackets(audioFileID,
-                             NO,
-                             NULL,
-                             NULL,
-                             i,
-                             &ioNumPackets,
-                             &buffer);
+        if (self.isCancelled) {
+            AudioFileClose(audioFileID);
+            return nil;
+        }
+
+        error = AudioFileReadPackets(audioFileID,
+                                     NO,
+                                     NULL,
+                                     NULL,
+                                     i,
+                                     &ioNumPackets,
+                                     &buffer);
+        if (error) {
+            NSLog(@"%s %d", __PRETTY_FUNCTION__, __LINE__);
+            AudioFileClose(audioFileID);
+            return nil;
+        }
 
         // 読み込んだパケットの平均値の取得
         int sum = 0;
@@ -142,7 +204,6 @@ static const NSInteger k1SecondResolution = kTempSoundFileSampleRate / kSoundExi
     }
 
     AudioFileClose(audioFileID);
-
     return soundExistenceArray;
 }
 
@@ -151,10 +212,12 @@ static const NSInteger k1SecondResolution = kTempSoundFileSampleRate / kSoundExi
 static const NSInteger kSoundExistenceJudgeCountNO = 20;
 static const NSInteger kSoundExistenceJudgeCountYES = 10;
 
-- (NSArray *)phraseBeginTimesFromSoundExistenceArray:(NSArray *)soundExistenceArray {
+- (NSArray *)phraseStartTimesFromSoundExistenceArray:(NSArray *)soundExistenceArray {
     NSMutableArray *phraseBeginTimes = [NSMutableArray array];
 
     for (int i = 0; i < soundExistenceArray.count - kSoundExistenceJudgeCountNO - kSoundExistenceJudgeCountYES; i++) {
+        if (self.isCancelled) return nil;
+
         BOOL isSoundExistence = [(NSNumber *)soundExistenceArray[i] boolValue];
         if (isSoundExistence) continue;
 
@@ -185,18 +248,27 @@ static const NSInteger kSoundExistenceJudgeCountYES = 10;
     return [phraseBeginTimes copy];
 }
 
-- (NSArray *)phrasesFromPhraseBeginTimes:(NSArray *)phraseBeginTimes songPlayTime:(CGFloat)songPlayTime {
-    NSMutableArray *phrases = [NSMutableArray array];
+#pragma mark - Helper
 
-    Phrase *phrase = [[Phrase alloc] initWithStartTime:0.0f];
-    [phrases addObject:phrase];
+- (NSURL *)tempWAVFileURL {
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"HH:mm:ss.SSS"];
+    NSString *fileName = [NSString stringWithFormat:@"%@.wav", [dateFormatter stringFromDate:[NSDate date]]];
+    return [NSURL fileURLWithPath:[NSTemporaryDirectory() stringByAppendingPathComponent:fileName]];
+}
 
-    for (int i = 0; i < phraseBeginTimes.count; i++) {
-        CGFloat startTime = [(NSNumber *)phraseBeginTimes[i] floatValue];
-        Phrase *phrase = [[Phrase alloc] initWithStartTime:startTime];
-        [phrases addObject:phrase];
-    }
-    return phrases;
+- (AudioStreamBasicDescription)tempWAVFileFormat {
+    AudioStreamBasicDescription format;
+    format.mFormatID          = kAudioFormatLinearPCM;
+    format.mFormatFlags	      = kLinearPCMFormatFlagIsSignedInteger | kLinearPCMFormatFlagIsPacked;
+    format.mSampleRate        = kTempSoundFileSampleRate;
+    format.mFramesPerPacket	  = 1;
+    format.mChannelsPerFrame  = 1;
+    format.mBitsPerChannel    = 16;
+    format.mBytesPerPacket    = 2;
+    format.mBytesPerFrame     = 2;
+    format.mReserved          = 0;
+    return format;
 }
 
 @end
