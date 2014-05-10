@@ -16,4 +16,6 @@
 
 + (CoreDataManager *)sharedManager;
 
+- (NSManagedObjectContext *)privateQueueContext;
+
 @end

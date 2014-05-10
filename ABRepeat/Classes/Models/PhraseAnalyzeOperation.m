@@ -8,9 +8,6 @@
 
 #import "PhraseAnalyzeOperation.h"
 #import <AudioToolbox/AudioToolbox.h>
-#import "SongController.h"
-#import "Phrase.h"
-#import "Song.h"
 
 static const NSInteger kTempSoundFileSampleRate = 10000;
 static const NSInteger kTempSoundFileReadFrame = 1024;
@@ -18,11 +15,12 @@ static const NSInteger kSoundExistenceBoundary = 100;
 static const NSInteger kSoundExistenceAverageReadPackets = 100;
 static const NSInteger k1SecondResolution = kTempSoundFileSampleRate / kSoundExistenceAverageReadPackets;
 
-static const CGFloat kProgressAfterCreateTempPCM = 0.9;
+static const CGFloat kProgressAfterCreateTempPCM = 1.0;
 
 @interface PhraseAnalyzeOperation ()
 
 @property (nonatomic, strong) MPMediaItem *mediaItem;
+@property (weak, nonatomic) id<PhraseAnalyzeOperationDelegate> delegate;
 
 @end
 
@@ -37,33 +35,27 @@ static const CGFloat kProgressAfterCreateTempPCM = 0.9;
     return self;
 }
 
-// TODO: 受け取った音楽ファイルが既にPCMな場合の処理があると良いかも
 - (void)main {
     NSURL *songURL = [self.mediaItem valueForProperty:MPMediaItemPropertyAssetURL];
-    Song *song = [self analyzedSongOrNil:songURL];
-    if (song) {
-        [self.delegate phraseAnalyzeOperationDidFinish:song];
-    } else if (!song && !self.isCancelled) {
+    NSArray *phraseStartTime = [self phraseStartTimeOrNil:songURL];
+    if (phraseStartTime) {
+        [self.delegate phraseAnalyzeOperationDidFinish:phraseStartTime];
+    } else if (!phraseStartTime && !self.isCancelled) {
         [self.delegate phraseAnalyzeOperationDidError];
     }
 }
 
-- (Song *)analyzedSongOrNil:(NSURL *)songURL {
+- (NSArray *)phraseStartTimeOrNil:(NSURL *)songURL {
     NSURL *tempPCMFileURL = [self createTempPCMData:songURL];
     if (!tempPCMFileURL || self.isCancelled) return nil;
 
-    [self.delegate phraseAnalyzeOperationDidChangeProgress:kProgressAfterCreateTempPCM];
     NSArray *existenceArray = [self soundExistenceArrayPer10Millisecond:tempPCMFileURL];
     if (!existenceArray || self.isCancelled) return nil;
 
-    [self.delegate phraseAnalyzeOperationDidChangeProgress:0.93];
+    [self removeTempFiles];
+
     NSArray *phraseStartTimes = [self phraseStartTimesFromSoundExistenceArray:existenceArray];
-
-    [self.delegate phraseAnalyzeOperationDidChangeProgress:0.96];
-    Song *song = [SongController createSongAndPhrasesFromPhraseStartTimes:phraseStartTimes mediaItem:self.mediaItem];
-    [self.delegate phraseAnalyzeOperationDidChangeProgress:0.9999];
-
-    return song;
+    return phraseStartTimes;
 }
 
 - (NSURL *)createTempPCMData:(NSURL *)songURL {
@@ -117,6 +109,7 @@ ERROR_HANDLING:
     while (1) {
         currentLoopCount++;
         float progress = (float)currentLoopCount / aboutLoopCount * kProgressAfterCreateTempPCM;
+        if (progress > 1) progress = 1.0;
         [self.delegate phraseAnalyzeOperationDidChangeProgress:progress];
 
         if (self.isCancelled) break;
@@ -205,6 +198,14 @@ ERROR_HANDLING:
 
     AudioFileClose(audioFileID);
     return soundExistenceArray;
+}
+
+- (void)removeTempFiles {
+    NSArray *paths = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:NSTemporaryDirectory() error:nil];
+    [paths enumerateObjectsUsingBlock:^(NSString *fileName, NSUInteger idx, BOOL *stop) {
+        NSString *absolutePath = [NSTemporaryDirectory() stringByAppendingPathComponent:fileName];
+        [[NSFileManager defaultManager] removeItemAtPath:absolutePath error:nil];
+    }];
 }
 
 // TODO: 頭出しをどう判定しているかのコメントが必要

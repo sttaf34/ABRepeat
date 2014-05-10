@@ -8,20 +8,24 @@
 
 #import "SongViewController.h"
 #import "SongCell.h"
+#import "EasyTapButton.h"
 #import "SongPlayer.h"
 #import "Phrase+Helper.h"
 #import "Song+Helper.h"
+
+static const NSInteger kButtonPadding = 16;
 
 @interface SongViewController () <SongPlayerDelegate, UITableViewDataSource, UITableViewDelegate>
 
 @property (nonatomic, strong) SongPlayer *songPlayer;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
-@property (weak, nonatomic) IBOutlet UIButton *repeatButton;
-@property (weak, nonatomic) IBOutlet UIButton *playButton;
-@property (weak, nonatomic) IBOutlet UIButton *speedMinusButton;
-@property (weak, nonatomic) IBOutlet UIButton *speedPlusButton;
+@property (weak, nonatomic) IBOutlet EasyTapButton *repeatButton;
+@property (weak, nonatomic) IBOutlet EasyTapButton *playButton;
+@property (weak, nonatomic) IBOutlet EasyTapButton *speedMinusButton;
+@property (weak, nonatomic) IBOutlet EasyTapButton *speedPlusButton;
 @property (weak, nonatomic) IBOutlet UILabel *playTimeLabel;
 @property (weak, nonatomic) IBOutlet UILabel *playSpeedLabel;
+@property (weak, nonatomic) IBOutlet UIView *buttonsView;
 
 @end
 
@@ -29,6 +33,18 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+
+    // Storyboardでは0.5pxの線が引けないのでコードで配置
+    UIView *border = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 0.5)];
+    border.backgroundColor = [UIColor colorWithWhite:178.0 / 255 alpha:1];
+    [self.buttonsView addSubview:border];
+
+    // 画面の最下部に配置されたボタンはハイライトが即座に反映されないので、ボトムのタップ領域は広げない
+    // 左右端のボタンは多目にタップ領域を拡大
+    self.repeatButton.tappableInsets     = UIEdgeInsetsMake(kButtonPadding, kButtonPadding * 2, 0, kButtonPadding);
+    self.playButton.tappableInsets       = UIEdgeInsetsMake(kButtonPadding, kButtonPadding, 0, kButtonPadding);
+    self.speedMinusButton.tappableInsets = UIEdgeInsetsMake(kButtonPadding, kButtonPadding, 0, kButtonPadding);
+    self.speedPlusButton.tappableInsets  = UIEdgeInsetsMake(kButtonPadding, kButtonPadding, 0, kButtonPadding * 2);
 
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
@@ -45,11 +61,7 @@
 }
 
 - (void)updateButtonsAndLabelsStatus {
-    if (self.songPlayer.isRepeat) {
-        self.repeatButton.alpha = 1.0;
-    } else {
-        self.repeatButton.alpha = 0.2;
-    }
+    self.repeatButton.selected = self.songPlayer.isRepeat;
     self.playButton.selected = self.songPlayer.isPlay;
     self.speedMinusButton.enabled = self.songPlayer.isEnabledSpeedDown;
     self.speedPlusButton.enabled = self.songPlayer.isEnabledSpeedUp;
@@ -78,6 +90,7 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *CellIdentifier = @"Cell";
     SongCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
+    [cell stopImmediatelyIndicator];
     [self updateCell:cell atIndexPath:indexPath];
     return cell;
 }

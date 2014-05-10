@@ -1,42 +1,28 @@
 //
-//  SongsViewController.m
+//  PlaylistSongsViewController.m
 //  ABRepeat
 //
-//  Created by Shinichi Kawamura on 4/27/14.
+//  Created by Shinichi Kawamura on 5/10/14.
 //  Copyright (c) 2014 Shinichi Kawamura. All rights reserved.
 //
 
-#import "SongsViewController.h"
-#import "SongViewController.h"
-#import "MRProgress.h"
+#import "PlaylistSongsViewController.h"
 #import "SongController.h"
+#import "MRProgress.h"
+#import "SongViewController.h"
 
-@interface SongsViewController () <SongControllerDelegate>
-
-@property (nonatomic, copy) NSArray *collections;
-@property (nonatomic, copy) NSArray *collectionSections;
-@property (nonatomic, copy) NSArray *rightSideTitles;
+@interface PlaylistSongsViewController ()
 @property (nonatomic, strong) SongController *songController;
 @property (nonatomic, strong) MRProgressOverlayView *progressView;
-
 @end
 
-@implementation SongsViewController
+@implementation PlaylistSongsViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
 
     self.songController = [[SongController alloc] initWithDelegate:self];
 
-    MPMediaQuery *mediaQuery = [MPMediaQuery songsQuery];
-    self.collections = mediaQuery.collections;
-    self.collectionSections = mediaQuery.collectionSections;
-
-    NSMutableArray *titles = [NSMutableArray array];
-    for (MPMediaQuerySection *section in self.collectionSections) {
-        [titles addObject:section.title];
-    }
-    self.rightSideTitles = [titles copy];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
@@ -53,7 +39,8 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 
-    MPMediaItem *mediaItem = [self mediaItem:indexPath];
+    MPMediaItem *mediaItem = self.playlist.items[indexPath.row];
+
     Song *song = [self.songController findSongByMediaItem:mediaItem];
 
     if (song) {
@@ -75,34 +62,19 @@
 #pragma mark - TableViewDataSource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return [self.collectionSections count];
+    return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    MPMediaQuerySection *mediaQuerySection = self.collectionSections[section];
-    return mediaQuerySection.range.length;
-}
-
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-    MPMediaQuerySection *mediaQuerySection = self.collectionSections[section];
-    return mediaQuerySection.title;
+    return self.playlist.items.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *CellIdentifier = @"Cell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
-    MPMediaItem *mediaItem = [self mediaItem:indexPath];
+    MPMediaItem *mediaItem = self.playlist.items[indexPath.row];
     cell.textLabel.text = [mediaItem valueForProperty:MPMediaItemPropertyTitle];
-    cell.textLabel.textColor = [UIColor colorWithWhite:44.0 / 255 alpha:1];
     return cell;
-}
-
-- (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView {
-    return self.rightSideTitles;
-}
-
-- (NSInteger)tableView:(UITableView *)tableView sectionForSectionIndexTitle:(NSString *)title atIndex:(NSInteger)index {
-    return [self.rightSideTitles indexOfObject:title];
 }
 
 #pragma mark - SongControllerDelegate
@@ -118,15 +90,7 @@
 }
 
 - (void)songControllerCreateSongDidError {
-    // TODO: アラートを出す予定
-}
 
-#pragma mark - Helper
-
-- (MPMediaItem *)mediaItem:(NSIndexPath *)indexPath {
-    MPMediaQuerySection *section = self.collectionSections[indexPath.section];
-    MPMediaItemCollection *mediaItemCollection = self.collections[section.range.location + indexPath.row];
-    return [mediaItemCollection representativeItem];
 }
 
 @end

@@ -13,5 +13,6 @@
 @property (weak, nonatomic) IBOutlet UILabel *timeLabel;
 
 - (void)playingIndicatorWorking:(BOOL)isWorking;
+- (void)stopImmediatelyIndicator;
 
 @end

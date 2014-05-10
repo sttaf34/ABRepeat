@@ -10,11 +10,23 @@
 #import "Song+Helper.h"
 #import "Phrase+Helper.h"
 
+@protocol SongControllerDelegate;
+
 @interface SongController : NSObject
 
-+ (Song *)createSongAndPhrasesFromPhraseStartTimes:(NSArray *)phraseStartTimes
-                                         mediaItem:(MPMediaItem *)mediaItem;
+- (id)initWithDelegate:(id)delegate;
 
-+ (Song *)findSongByMediaItem:(MPMediaItem *)mediaItem;
+- (Song *)findSongByMediaItem:(MPMediaItem *)mediaItem;
+
+- (void)startCreateSongFromMediaItem:(MPMediaItem *)mediaItem;
+- (void)cancelCreateSong;
+
+@end
+
+@protocol SongControllerDelegate <NSObject>
+
+- (void)songControllerCreateSongDidChangeProgress:(CGFloat)progress;
+- (void)songControllerCreateSongDidFinish:(MPMediaItem *)mediaItem;
+- (void)songControllerCreateSongDidError;
 
 @end

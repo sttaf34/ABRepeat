@@ -8,13 +8,9 @@
 
 #import <Foundation/Foundation.h>
 
-@class Song;
-
 @protocol PhraseAnalyzeOperationDelegate;
 
 @interface PhraseAnalyzeOperation : NSOperation
-
-@property (weak, nonatomic) id<PhraseAnalyzeOperationDelegate> delegate;
 
 - (id)initWithMediaItem:(MPMediaItem *)mediaItem delegate:(id)delegate;
 
@@ -23,7 +19,7 @@
 @protocol PhraseAnalyzeOperationDelegate <NSObject>
 
 - (void)phraseAnalyzeOperationDidChangeProgress:(CGFloat)progress;
-- (void)phraseAnalyzeOperationDidFinish:(Song *)song;
+- (void)phraseAnalyzeOperationDidFinish:(NSArray *)phraseStartTimes;
 - (void)phraseAnalyzeOperationDidError;
 
 @end

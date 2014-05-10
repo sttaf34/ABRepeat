@@ -22,8 +22,10 @@ const CGFloat kPlaySpeedDistance = 0.1;
 @property (nonatomic, strong) Song *song;
 @property (nonatomic, strong) NSArray *phrases;
 @property (nonatomic, strong) AVAudioPlayer *player;
-@property (nonatomic, strong) NSTimer *timer;
 @property (nonatomic, assign, readwrite) NSUInteger playingIndex;
+
+@property (nonatomic, strong) NSTimer *checkCurrentTimeTimer;
+@property (nonatomic, strong) NSTimer *checkPlayingIndexTimer;
 
 @end
 
@@ -44,17 +46,24 @@ const CGFloat kPlaySpeedDistance = 0.1;
         _player.numberOfLoops = 0;
         _player.enableRate = YES;
 
-        self.timer = [NSTimer scheduledTimerWithTimeInterval:0.1f
-                                                      target:self
-                                                    selector:@selector(checkPlayingIndex)
-                                                    userInfo:nil
-                                                     repeats:YES];
+        self.checkCurrentTimeTimer = [NSTimer scheduledTimerWithTimeInterval:0.1f
+                                                                      target:self
+                                                                    selector:@selector(checkCurrentTime)
+                                                                    userInfo:nil
+                                                                     repeats:YES];
+
+        self.checkPlayingIndexTimer = [NSTimer scheduledTimerWithTimeInterval:0.5f
+                                                                       target:self
+                                                                     selector:@selector(checkPlayingIndex)
+                                                                     userInfo:nil
+                                                                      repeats:YES];
     }
     return self;
 }
 
 - (void)dealloc {
-    [self.timer invalidate];
+    [self.checkCurrentTimeTimer invalidate];
+    [self.checkPlayingIndexTimer invalidate];
 }
 
 #pragma mark - Player
@@ -121,9 +130,11 @@ const CGFloat kPlaySpeedDistance = 0.1;
 
 #pragma mark - Timer
 
-- (void)checkPlayingIndex {
+- (void)checkCurrentTime {
     [self.delegate songPlayerChangeCurrentTime:self.player.currentTime];
+}
 
+- (void)checkPlayingIndex {
     NSUInteger currentPlayingIndex = SongPlayerCurrentPlayingIndexStop;
 
     if (self.player.playing) {

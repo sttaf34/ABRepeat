@@ -53,4 +53,10 @@
     return self;
 }
 
+- (NSManagedObjectContext *)privateQueueContext {
+    NSManagedObjectContext *context = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+    [context setPersistentStoreCoordinator:self.persistentStoreCoordinator];
+    return context;
+}
+
 @end

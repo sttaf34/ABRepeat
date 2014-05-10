@@ -82,4 +82,14 @@ static const CGFloat kAnimationSettingRandomDistance = 0.05;
     }
 }
 
+- (void)stopImmediatelyIndicator {
+    self.isAnimation = NO;
+
+    NSArray *bars = @[self.leftBar, self.centerBar, self.rightBar];
+    for (UIImageView *bar in bars) {
+        bar.frame = CGRectMake(bar.frame.origin.x, kBarMaxY, bar.frame.size.width, kBarMinHeight);
+        [bar.layer removeAllAnimations];
+    }
+}
+
 @end
