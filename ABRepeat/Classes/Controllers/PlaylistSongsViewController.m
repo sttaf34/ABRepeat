@@ -22,7 +22,6 @@
     [super viewDidLoad];
 
     self.songController = [[SongController alloc] initWithDelegate:self];
-
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
@@ -90,7 +89,7 @@
 }
 
 - (void)songControllerCreateSongDidError {
-
+    self.progressView.titleLabelText = @"対応していないファイルでした";
 }
 
 @end

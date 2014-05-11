@@ -46,6 +46,10 @@ const CGFloat kPlaySpeedDistance = 0.1;
         _player.numberOfLoops = 0;
         _player.enableRate = YES;
 
+        AVAudioSession *audioSession = [AVAudioSession sharedInstance];
+        [audioSession setCategory:AVAudioSessionCategoryPlayback error:nil];
+        [audioSession setActive:YES error:nil];
+
         self.checkCurrentTimeTimer = [NSTimer scheduledTimerWithTimeInterval:0.1f
                                                                       target:self
                                                                     selector:@selector(checkCurrentTime)

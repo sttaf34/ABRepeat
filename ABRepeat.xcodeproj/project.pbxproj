@@ -342,6 +342,13 @@
 				LastUpgradeCheck = 0510;
 				ORGANIZATIONNAME = "Shinichi Kawamura";
 				TargetAttributes = {
+					527A5873190C26A1005DA746 = {
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+						};
+					};
 					527A588E190C26A2005DA746 = {
 						TestTargetID = 527A5873190C26A1005DA746;
 					};

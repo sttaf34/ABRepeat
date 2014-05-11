@@ -118,7 +118,7 @@
 }
 
 - (void)songControllerCreateSongDidError {
-    // TODO: アラートを出す予定
+    self.progressView.titleLabelText = @"未対応の\nファイルです";
 }
 
 #pragma mark - Helper

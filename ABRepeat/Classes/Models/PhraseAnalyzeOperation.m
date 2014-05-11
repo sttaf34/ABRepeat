@@ -10,7 +10,7 @@
 #import <AudioToolbox/AudioToolbox.h>
 
 static const NSInteger kTempSoundFileSampleRate = 10000;
-static const NSInteger kTempSoundFileReadFrame = 1024;
+static const NSInteger kTempSoundFileReadFrame = 4096;
 static const NSInteger kSoundExistenceBoundary = 100;
 static const NSInteger kSoundExistenceAverageReadPackets = 100;
 static const NSInteger k1SecondResolution = kTempSoundFileSampleRate / kSoundExistenceAverageReadPackets;
@@ -38,6 +38,7 @@ static const CGFloat kProgressAfterCreateTempPCM = 1.0;
 - (void)main {
     NSURL *songURL = [self.mediaItem valueForProperty:MPMediaItemPropertyAssetURL];
     NSArray *phraseStartTime = [self phraseStartTimeOrNil:songURL];
+
     if (phraseStartTime) {
         [self.delegate phraseAnalyzeOperationDidFinish:phraseStartTime];
     } else if (!phraseStartTime && !self.isCancelled) {
@@ -47,6 +48,7 @@ static const CGFloat kProgressAfterCreateTempPCM = 1.0;
 
 - (NSArray *)phraseStartTimeOrNil:(NSURL *)songURL {
     NSURL *tempPCMFileURL = [self createTempPCMData:songURL];
+
     if (!tempPCMFileURL || self.isCancelled) return nil;
 
     NSArray *existenceArray = [self soundExistenceArrayPer10Millisecond:tempPCMFileURL];
@@ -102,7 +104,7 @@ ERROR_HANDLING:
     UInt64 fileLengthFrames = 0;
     UInt32 size = sizeof(SInt64);
     ExtAudioFileGetProperty(infile, kExtAudioFileProperty_FileLengthFrames, &size, &fileLengthFrames);
-    UInt64 aboutLoopCount = fileLengthFrames / 4500;
+    UInt64 aboutLoopCount = fileLengthFrames / 4500 / 4;
 
     BOOL isSuccess = NO;
     int currentLoopCount = 0;
