@@ -30,7 +30,7 @@
 		527A589D190C26A2005DA746 /* ABRepeatTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 527A589C190C26A2005DA746 /* ABRepeatTests.m */; };
 		527A58AC190C26BF005DA746 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 527A58A8190C26BF005DA746 /* AppDelegate.m */; };
 		527A58AE190C26F8005DA746 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 527A58AD190C26F8005DA746 /* Main.storyboard */; };
-		527A58B1190C299B005DA746 /* SongsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 527A58B0190C299B005DA746 /* SongsViewController.m */; };
+		527A58B1190C299B005DA746 /* SectionIndexSongsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 527A58B0190C299B005DA746 /* SectionIndexSongsViewController.m */; };
 		529A8DB7191250480051DC94 /* loop.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 529A8DB5191250480051DC94 /* loop.mp3 */; };
 		529A8DB8191250480051DC94 /* sine.aif in Resources */ = {isa = PBXBuildFile; fileRef = 529A8DB6191250480051DC94 /* sine.aif */; };
 		529A8DBA1912541C0051DC94 /* he.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 529A8DB91912541C0051DC94 /* he.m4a */; };
@@ -39,7 +39,7 @@
 		52CDFD43191D97D100FC84CA /* EasyTapButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 52CDFD42191D97D100FC84CA /* EasyTapButton.m */; };
 		52CDFD46191DFC5E00FC84CA /* PlaylistsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 52CDFD45191DFC5E00FC84CA /* PlaylistsViewController.m */; };
 		52CDFD49191E06CD00FC84CA /* AlbumsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 52CDFD48191E06CD00FC84CA /* AlbumsViewController.m */; };
-		52CDFD4C191E0AD500FC84CA /* PlaylistSongsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 52CDFD4B191E0AD500FC84CA /* PlaylistSongsViewController.m */; };
+		52CDFD4C191E0AD500FC84CA /* SongsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 52CDFD4B191E0AD500FC84CA /* SongsViewController.m */; };
 		AFAAFE826BFA4A46A06AE281 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 913D4C94EC864880B90FB80A /* libPods.a */; };
 /* End PBXBuildFile section */
 
@@ -90,8 +90,8 @@
 		527A58A7190C26BF005DA746 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		527A58A8190C26BF005DA746 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		527A58AD190C26F8005DA746 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
-		527A58AF190C299B005DA746 /* SongsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SongsViewController.h; sourceTree = "<group>"; };
-		527A58B0190C299B005DA746 /* SongsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SongsViewController.m; sourceTree = "<group>"; };
+		527A58AF190C299B005DA746 /* SectionIndexSongsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SectionIndexSongsViewController.h; sourceTree = "<group>"; };
+		527A58B0190C299B005DA746 /* SectionIndexSongsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SectionIndexSongsViewController.m; sourceTree = "<group>"; };
 		529A8DB5191250480051DC94 /* loop.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = loop.mp3; sourceTree = "<group>"; };
 		529A8DB6191250480051DC94 /* sine.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = sine.aif; sourceTree = "<group>"; };
 		529A8DB91912541C0051DC94 /* he.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = he.m4a; sourceTree = "<group>"; };
@@ -105,8 +105,8 @@
 		52CDFD45191DFC5E00FC84CA /* PlaylistsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlaylistsViewController.m; sourceTree = "<group>"; };
 		52CDFD47191E06CD00FC84CA /* AlbumsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlbumsViewController.h; sourceTree = "<group>"; };
 		52CDFD48191E06CD00FC84CA /* AlbumsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AlbumsViewController.m; sourceTree = "<group>"; };
-		52CDFD4A191E0AD500FC84CA /* PlaylistSongsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlaylistSongsViewController.h; sourceTree = "<group>"; };
-		52CDFD4B191E0AD500FC84CA /* PlaylistSongsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlaylistSongsViewController.m; sourceTree = "<group>"; };
+		52CDFD4A191E0AD500FC84CA /* SongsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SongsViewController.h; sourceTree = "<group>"; };
+		52CDFD4B191E0AD500FC84CA /* SongsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SongsViewController.m; sourceTree = "<group>"; };
 		913D4C94EC864880B90FB80A /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		FA0B24F28D3A43AFB946B9A3 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -238,16 +238,16 @@
 		527A58A9190C26BF005DA746 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				527A58AF190C299B005DA746 /* SongsViewController.h */,
-				527A58B0190C299B005DA746 /* SongsViewController.m */,
-				529A8DBD191264360051DC94 /* SongViewController.h */,
-				529A8DBE191264360051DC94 /* SongViewController.m */,
 				52CDFD44191DFC5E00FC84CA /* PlaylistsViewController.h */,
 				52CDFD45191DFC5E00FC84CA /* PlaylistsViewController.m */,
-				52CDFD4A191E0AD500FC84CA /* PlaylistSongsViewController.h */,
-				52CDFD4B191E0AD500FC84CA /* PlaylistSongsViewController.m */,
 				52CDFD47191E06CD00FC84CA /* AlbumsViewController.h */,
 				52CDFD48191E06CD00FC84CA /* AlbumsViewController.m */,
+				52CDFD4A191E0AD500FC84CA /* SongsViewController.h */,
+				52CDFD4B191E0AD500FC84CA /* SongsViewController.m */,
+				527A58AF190C299B005DA746 /* SectionIndexSongsViewController.h */,
+				527A58B0190C299B005DA746 /* SectionIndexSongsViewController.m */,
+				529A8DBD191264360051DC94 /* SongViewController.h */,
+				529A8DBE191264360051DC94 /* SongViewController.m */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -443,9 +443,9 @@
 				52CDFD49191E06CD00FC84CA /* AlbumsViewController.m in Sources */,
 				520AE7F3191C551B001E24DF /* Phrase+Helper.m in Sources */,
 				52CDFD46191DFC5E00FC84CA /* PlaylistsViewController.m in Sources */,
-				527A58B1190C299B005DA746 /* SongsViewController.m in Sources */,
+				527A58B1190C299B005DA746 /* SectionIndexSongsViewController.m in Sources */,
 				520AE7D71919F77B001E24DF /* NSManagedObject+Helper.m in Sources */,
-				52CDFD4C191E0AD500FC84CA /* PlaylistSongsViewController.m in Sources */,
+				52CDFD4C191E0AD500FC84CA /* SongsViewController.m in Sources */,
 				527A58AC190C26BF005DA746 /* AppDelegate.m in Sources */,
 				529A8DBF191264360051DC94 /* SongViewController.m in Sources */,
 				527A5884190C26A2005DA746 /* main.m in Sources */,

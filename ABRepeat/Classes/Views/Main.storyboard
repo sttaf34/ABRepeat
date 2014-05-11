@@ -18,40 +18,11 @@
                         <segue destination="YsW-BN-x5b" kind="relationship" relationship="viewControllers" id="hho-tJ-nHP"/>
                         <segue destination="ozM-Sr-clf" kind="relationship" relationship="viewControllers" id="cC2-4U-n6c"/>
                         <segue destination="haO-UH-LFO" kind="relationship" relationship="viewControllers" id="uWL-sY-oQk"/>
-                        <segue destination="A5H-Pj-VL8" kind="relationship" relationship="viewControllers" id="wzI-KJ-QVA"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ULf-XR-1YP" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="172" y="111"/>
-        </scene>
-        <!--View Controller - Setting-->
-        <scene sceneID="Ndj-qz-xXw">
-            <objects>
-                <viewController id="A5H-Pj-VL8" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="es5-wn-fpq"/>
-                        <viewControllerLayoutGuide type="bottom" id="Pki-l9-xNb"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="Z9x-Xg-AGa">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sn1-eR-GRL">
-                                <rect key="frame" x="135" y="259" width="50" height="50"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" backgroundImage="Play">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                            </button>
-                        </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                    </view>
-                    <tabBarItem key="tabBarItem" title="Setting" image="Setting" id="dS7-bR-Rix"/>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="jvc-vx-qUT" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="906" y="1319"/>
         </scene>
         <!--Playlists View Controller - Playlists-->
         <scene sceneID="KIj-Xy-Jjz">
@@ -61,12 +32,17 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <view key="tableFooterView" contentMode="scaleToFill" id="Y2D-NA-KMo">
+                            <rect key="frame" x="0.0" y="130" width="320" height="0.0"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        </view>
                         <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Cell" id="5Qr-2C-kzX">
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Cell" id="5Qr-2C-kzX">
                                 <rect key="frame" x="0.0" y="86" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="5Qr-2C-kzX" id="Zzs-xp-uhj">
-                                    <rect key="frame" x="0.0" y="0.0" width="287" height="43"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
                                 <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
@@ -79,21 +55,26 @@
                     </tableView>
                     <navigationItem key="navigationItem" title="Playlists" id="GN8-3a-mB7"/>
                     <connections>
-                        <segue destination="kze-Wg-gVE" kind="push" identifier="ToPlaylistSongs" id="VK5-Nv-XR8"/>
+                        <segue destination="kze-Wg-gVE" kind="push" identifier="ToSongs" id="VK5-Nv-XR8"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Pu5-Eu-Xz4" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1388" y="111"/>
         </scene>
-        <!--Playlist Songs View Controller-->
+        <!--Songs View Controller-->
         <scene sceneID="1b4-T5-EyO">
             <objects>
-                <tableViewController id="kze-Wg-gVE" customClass="PlaylistSongsViewController" sceneMemberID="viewController">
+                <tableViewController id="kze-Wg-gVE" customClass="SongsViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="Bez-aS-LYr">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <view key="tableFooterView" contentMode="scaleToFill" id="WWJ-k6-gbB">
+                            <rect key="frame" x="0.0" y="130" width="320" height="0.0"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        </view>
                         <prototypes>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Cell" id="AdV-oO-gv2">
                                 <rect key="frame" x="0.0" y="86" width="320" height="44"/>
@@ -102,6 +83,7 @@
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
+                                <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                             </tableViewCell>
                         </prototypes>
                         <connections>
@@ -126,6 +108,11 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <view key="tableFooterView" contentMode="scaleToFill" id="zJz-xb-Zjt">
+                            <rect key="frame" x="0.0" y="130" width="320" height="0.0"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        </view>
                         <prototypes>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Cell" id="s85-5x-N2V">
                                 <rect key="frame" x="0.0" y="86" width="320" height="44"/>
@@ -143,16 +130,57 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Albums" id="27c-YR-8Jq"/>
+                    <connections>
+                        <segue destination="HEY-i1-3SI" kind="push" identifier="ToSongs" id="Uca-LW-dYB"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6t1-D3-PRr" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1388" y="719"/>
         </scene>
+        <!--Songs View Controller-->
+        <scene sceneID="DTB-Dq-ReA">
+            <objects>
+                <tableViewController id="HEY-i1-3SI" customClass="SongsViewController" sceneMemberID="viewController">
+                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="ruA-ux-tNi">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <view key="tableFooterView" contentMode="scaleToFill" id="FaJ-ac-hly">
+                            <rect key="frame" x="0.0" y="130" width="320" height="0.0"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        </view>
+                        <prototypes>
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Cell" id="BrK-TV-SG3">
+                                <rect key="frame" x="0.0" y="86" width="320" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="BrK-TV-SG3" id="e5O-yw-m0w">
+                                    <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </tableViewCellContentView>
+                                <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="HEY-i1-3SI" id="pcG-KN-nyL"/>
+                            <outlet property="delegate" destination="HEY-i1-3SI" id="yqZ-M3-8uQ"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" id="uiX-pg-Je7"/>
+                    <connections>
+                        <segue destination="Sdi-OM-cAj" kind="push" identifier="ToSong" id="ous-VN-pVA"/>
+                    </connections>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Qji-sk-YAn" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1859" y="719"/>
+        </scene>
         <!--Navigation Controller - Albums-->
         <scene sceneID="ARN-OJ-fSa">
             <objects>
                 <navigationController definesPresentationContext="YES" id="haO-UH-LFO" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Albums" image="Setting" id="iau-n9-FS3"/>
+                    <tabBarItem key="tabBarItem" title="Albums" image="Albums" id="iau-n9-FS3"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="GQA-ap-tZz">
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -168,7 +196,7 @@
         <scene sceneID="26p-B4-wtP">
             <objects>
                 <navigationController definesPresentationContext="YES" id="ozM-Sr-clf" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Playlists" image="Setting" id="Hnr-2E-Ps9"/>
+                    <tabBarItem key="tabBarItem" title="Playlists" image="Playlists" id="Hnr-2E-Ps9"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="Ufb-P7-rnQ">
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -180,10 +208,10 @@
             </objects>
             <point key="canvasLocation" x="906" y="111"/>
         </scene>
-        <!--Songs View Controller - Songs-->
+        <!--Section Index Songs View Controller - Songs-->
         <scene sceneID="udX-qq-Wi3">
             <objects>
-                <tableViewController id="PR9-4q-vA0" customClass="SongsViewController" sceneMemberID="viewController">
+                <tableViewController id="PR9-4q-vA0" customClass="SectionIndexSongsViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="10b-Af-Kqm">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -222,7 +250,7 @@
         <scene sceneID="flW-4z-ral">
             <objects>
                 <navigationController definesPresentationContext="YES" id="YsW-BN-x5b" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Songs" image="Song" id="unX-Xb-V96"/>
+                    <tabBarItem key="tabBarItem" title="Songs" image="Songs" id="unX-Xb-V96"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="nf1-7B-m1S">
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -398,15 +426,16 @@
         </scene>
     </scenes>
     <resources>
+        <image name="Albums" width="28" height="28"/>
         <image name="Blue" width="4" height="4"/>
         <image name="Minus" width="64" height="64"/>
         <image name="Pause" width="64" height="64"/>
         <image name="Play" width="64" height="64"/>
+        <image name="Playlists" width="28" height="22"/>
         <image name="Plus" width="64" height="64"/>
         <image name="Repeat" width="64" height="64"/>
         <image name="RepeatBlue" width="64" height="64"/>
-        <image name="Setting" width="28" height="28"/>
-        <image name="Song" width="28" height="28"/>
+        <image name="Songs" width="28" height="28"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
@@ -414,6 +443,6 @@
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="kCq-6s-dR6"/>
+        <segue reference="OXi-Ny-URN"/>
     </inferredMetricsTieBreakers>
 </document>

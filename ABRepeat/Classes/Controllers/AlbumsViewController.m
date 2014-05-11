@@ -7,6 +7,7 @@
 //
 
 #import "AlbumsViewController.h"
+#import "SongsViewController.h"
 
 @interface AlbumsViewController ()
 
@@ -22,8 +23,24 @@
     self.albums = [MPMediaQuery albumsQuery].collections;
 }
 
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    if ([segue.identifier isEqualToString:@"ToSongs"]) {
+        SongsViewController *viewController = [segue destinationViewController];
+        viewController.mediaItemCollection = sender;
+
+        MPMediaItem *mediaItem = [(MPMediaItemCollection *)sender representativeItem];
+        viewController.navigationItem.title = [mediaItem valueForProperty:MPMediaItemPropertyAlbumTitle];
+    }
+}
+
 #pragma mark - TableViewDelegate
 
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+
+    MPMediaItemCollection *album = self.albums[indexPath.row];
+    [self performSegueWithIdentifier:@"ToSongs" sender:album];
+}
 
 #pragma mark - TableViewDataSource
 
@@ -41,7 +58,6 @@
     MPMediaItemCollection *collection = self.albums[indexPath.row];
     MPMediaItem *mediaItem = [collection representativeItem];
     cell.textLabel.text = [mediaItem valueForProperty:MPMediaItemPropertyAlbumTitle];
-    NSLog(@"%@", [collection valueForProperty:MPMediaItemPropertyAlbumTitle]);
     return cell;
 }
 

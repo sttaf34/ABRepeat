@@ -7,7 +7,7 @@
 //
 
 #import "PlaylistsViewController.h"
-#import "PlaylistSongsViewController.h"
+#import "SongsViewController.h"
 
 @interface PlaylistsViewController ()
 
@@ -24,10 +24,11 @@
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    if ([segue.identifier isEqualToString:@"ToPlaylistSongs"]) {
-        PlaylistSongsViewController *viewController = [segue destinationViewController];
-        viewController.playlist = sender;
-        viewController.navigationItem.title = @"hoge";
+    if ([segue.identifier isEqualToString:@"ToSongs"]) {
+        SongsViewController *viewController = [segue destinationViewController];
+
+        viewController.mediaItemCollection = sender;
+        viewController.navigationItem.title = [sender valueForProperty:MPMediaPlaylistPropertyName];
     }
 }
 
@@ -37,7 +38,7 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 
     MPMediaItemCollection *playlist = self.playlists[indexPath.row];
-    [self performSegueWithIdentifier:@"ToPlaylistSongs" sender:playlist];
+    [self performSegueWithIdentifier:@"ToSongs" sender:playlist];
 }
 
 #pragma mark - TableViewDataSource
