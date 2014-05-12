@@ -1,0 +1,27 @@
+
+/* Class = "IBUILabel"; text = "00:02.33"; ObjectID = "0Aq-C6-nOj"; */
+"0Aq-C6-nOj.text" = "00:02.33";
+
+/* Class = "IBUINavigationItem"; title = "Albums"; ObjectID = "27c-YR-8Jq"; */
+"27c-YR-8Jq.title" = "Albums";
+
+/* Class = "IBUINavigationItem"; title = "Songs"; ObjectID = "5cI-jS-2LH"; */
+"5cI-jS-2LH.title" = "Songs";
+
+/* Class = "IBUINavigationItem"; title = "Playlists"; ObjectID = "GN8-3a-mB7"; */
+"GN8-3a-mB7.title" = "Playlists";
+
+/* Class = "IBUITabBarItem"; title = "Playlists"; ObjectID = "Hnr-2E-Ps9"; */
+"Hnr-2E-Ps9.title" = "Playlists";
+
+/* Class = "IBUITabBarItem"; title = "Albums"; ObjectID = "iau-n9-FS3"; */
+"iau-n9-FS3.title" = "Albums";
+
+/* Class = "IBUILabel"; text = "100%"; ObjectID = "uA9-12-88c"; */
+"uA9-12-88c.text" = "100%";
+
+/* Class = "IBUITabBarItem"; title = "Songs"; ObjectID = "unX-Xb-V96"; */
+"unX-Xb-V96.title" = "Songs";
+
+/* Class = "IBUILabel"; text = "00:01"; ObjectID = "xpk-g1-NvD"; */
+"xpk-g1-NvD.text" = "00:01";

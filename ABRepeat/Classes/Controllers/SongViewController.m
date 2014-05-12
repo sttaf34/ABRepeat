@@ -66,7 +66,7 @@ static const NSInteger kButtonPadding = 16;
     self.speedMinusButton.enabled = self.songPlayer.isEnabledSpeedDown;
     self.speedPlusButton.enabled = self.songPlayer.isEnabledSpeedUp;
 
-    self.playSpeedLabel.text = [NSString stringWithFormat:@"%d%%", self.songPlayer.playSpeed];
+    self.playSpeedLabel.text = [NSString stringWithFormat:@"%d%%", (int)self.songPlayer.playSpeed];
 }
 
 #pragma mark - TableViewDelegate
@@ -105,7 +105,7 @@ static const NSInteger kButtonPadding = 16;
 
 - (void)updateCell:(SongCell *)cell atIndexPath:(NSIndexPath *)indexPath {
     Phrase *phrase = self.song.sortedPhrases[indexPath.row];
-    cell.timeLabel.text = [NSString stringWithFormat:@"%02d:%02d.%02d", phrase.startTimeMinute, phrase.startTimeSecond, phrase.startTime10Millisecond];
+    cell.timeLabel.text = [NSString stringWithFormat:@"%02d:%02d.%02d", (int)phrase.startTimeMinute, (int)phrase.startTimeSecond, (int)phrase.startTime10Millisecond];
     [cell playingIndicatorWorking:(indexPath.row == self.songPlayer.playingIndex)];
 }
 
@@ -125,10 +125,8 @@ static const NSInteger kButtonPadding = 16;
     [self updateButtonsAndLabelsStatus];
 }
 
-- (void)songPlayerChangeCurrentTime:(CGFloat)currentTime {
-    int minute = (int)currentTime / 60;
-    int second = (int)currentTime % 60;
-    self.playTimeLabel.text = [NSString stringWithFormat:@"%02d:%02d", minute, second];
+- (void)songPlayerChangeTIme:(NSString *)currentTimeAndTotalTime {
+    self.playTimeLabel.text = currentTimeAndTotalTime;
 }
 
 #pragma mark - ButtonCallback

@@ -89,7 +89,7 @@
 }
 
 - (void)songControllerCreateSongDidError {
-    self.progressView.titleLabelText = @"対応していないファイルでした";
+    self.progressView.titleLabelText = NSLocalizedString(@"SongsViewController songControllerCreateSongDidError", @"");
 }
 
 @end

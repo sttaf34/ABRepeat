@@ -118,7 +118,7 @@
 }
 
 - (void)songControllerCreateSongDidError {
-    self.progressView.titleLabelText = @"未対応の\nファイルです";
+    self.progressView.titleLabelText = NSLocalizedString(@"SectionIndexSongsViewController songControllerCreateSongDidError", @"");
 }
 
 #pragma mark - Helper

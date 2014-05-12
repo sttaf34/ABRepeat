@@ -11,6 +11,7 @@
 extern const NSUInteger SongPlayerCurrentPlayingIndexStop;
 
 @class Song;
+
 @protocol SongPlayerDelegate;
 
 @interface SongPlayer : NSObject
@@ -40,6 +41,6 @@ extern const NSUInteger SongPlayerCurrentPlayingIndexStop;
 
 - (void)songPlayerPlayerStop;
 - (void)songPlayerChangePhraseAtIndex:(NSUInteger)index;
-- (void)songPlayerChangeCurrentTime:(CGFloat)currentTime;
+- (void)songPlayerChangeTIme:(NSString *)currentTimeAndTotalTime;
 
 @end

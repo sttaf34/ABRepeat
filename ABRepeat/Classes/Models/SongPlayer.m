@@ -10,10 +10,11 @@
 #import <AVFoundation/AVFoundation.h>
 #import "Phrase.h"
 #import "Song+Helper.h"
+#import "SongPlayerSettingStore.h"
 
 const NSUInteger SongPlayerCurrentPlayingIndexStop = NSUIntegerMax;
-const CGFloat kPlaySpeedMin = 0.8;
-const CGFloat kPlaySpeedMax = 1.5;
+const CGFloat kPlaySpeedMin = 0.5;
+const CGFloat kPlaySpeedMax = 2.5;
 const CGFloat kPlaySpeedDistance = 0.1;
 
 @interface SongPlayer () <AVAudioPlayerDelegate>
@@ -43,12 +44,17 @@ const CGFloat kPlaySpeedDistance = 0.1;
         _player = [[AVAudioPlayer alloc] initWithContentsOfURL:song.URL error:&error];
         if (error) return nil;
         _player.delegate = self;
-        _player.numberOfLoops = 0;
         _player.enableRate = YES;
+        _player.rate = [SongPlayerSettingStore rate];
+        _player.numberOfLoops = [SongPlayerSettingStore numberOfLoops];
+
 
         AVAudioSession *audioSession = [AVAudioSession sharedInstance];
         [audioSession setCategory:AVAudioSessionCategoryPlayback error:nil];
         [audioSession setActive:YES error:nil];
+
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(audioRouteChangeCallback:)
+                                                     name:AVAudioSessionRouteChangeNotification object:nil];
 
         self.checkCurrentTimeTimer = [NSTimer scheduledTimerWithTimeInterval:0.1f
                                                                       target:self
@@ -66,11 +72,12 @@ const CGFloat kPlaySpeedDistance = 0.1;
 }
 
 - (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
     [self.checkCurrentTimeTimer invalidate];
     [self.checkPlayingIndexTimer invalidate];
 }
 
-#pragma mark - Player
+#pragma mark - PlayerControl
 
 - (void)playPhraseAtIndex:(NSUInteger)index {
     Phrase *phrase = self.song.sortedPhrases[index];
@@ -95,8 +102,11 @@ const CGFloat kPlaySpeedDistance = 0.1;
     return self.player.playing;
 }
 
+#pragma mark - Repeat
+
 - (BOOL)repeatToggle {
     self.player.numberOfLoops = -1 - self.player.numberOfLoops;
+    [SongPlayerSettingStore setNumberOfLoops:self.player.numberOfLoops];
     return [self isRepeat];
 }
 
@@ -113,11 +123,13 @@ const CGFloat kPlaySpeedDistance = 0.1;
 - (void)speedUp {
     self.player.rate += kPlaySpeedDistance;
     self.player.rate = (self.player.rate > kPlaySpeedMax) ? kPlaySpeedMax : self.player.rate;
+    [SongPlayerSettingStore setRate:self.player.rate];
 }
 
 - (void)speedDown {
     self.player.rate -= kPlaySpeedDistance;
     self.player.rate = (self.player.rate < kPlaySpeedMin) ? kPlaySpeedMin : self.player.rate;
+    [SongPlayerSettingStore setRate:self.player.rate];
 }
 
 - (BOOL)isEnabledSpeedUp {
@@ -135,7 +147,12 @@ const CGFloat kPlaySpeedDistance = 0.1;
 #pragma mark - Timer
 
 - (void)checkCurrentTime {
-    [self.delegate songPlayerChangeCurrentTime:self.player.currentTime];
+    int currentMinute = (int)self.player.currentTime / 60;
+    int currentSecond = (int)self.player.currentTime % 60;
+    int totalMinute   = (int)self.player.duration / 60;
+    int totalSecond   = (int)self.player.duration % 60;
+    NSString *time = [NSString stringWithFormat:@"%02d:%02d / %02d:%02d", currentMinute, currentSecond, totalMinute, totalSecond];
+    [self.delegate songPlayerChangeTIme:time];
 }
 
 - (void)checkPlayingIndex {
@@ -163,6 +180,21 @@ const CGFloat kPlaySpeedDistance = 0.1;
 
 - (void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag {
     [self.delegate songPlayerPlayerStop];
+}
+
+#pragma mark - 
+
+- (void)audioRouteChangeCallback:(NSNotification *)notification {
+    NSInteger routeChangeReason = [[notification.userInfo valueForKey:AVAudioSessionRouteChangeReasonKey] integerValue];
+    switch (routeChangeReason) {
+        case AVAudioSessionRouteChangeReasonNewDeviceAvailable:
+            break;
+        case AVAudioSessionRouteChangeReasonOldDeviceUnavailable:
+            [self.player pause];
+            break;
+        default:
+            break;
+    }
 }
 
 @end
