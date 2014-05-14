@@ -1,9 +1,10 @@
 language: objective-c
 
 before_install:
+- gem install cocoapods -v '0.32.1'
 - brew update
 - brew upgrade xctool
 
-xcode_project: ABRepeat.xcodeproj
+xcode_workspace ABRepeat.xcworkspace
 xcode_scheme: ABRepeat
 xcode_sdk: iphonesimulator7.1
