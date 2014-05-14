@@ -1,0 +1,9 @@
+language: objective-c
+
+before_install:
+- brew update
+- brew upgrade xctool
+
+xcode_project: ABRepeat.xcodeproj
+xcode_scheme: ABRepeat
+xcode_sdk: iphonesimulator7.1
