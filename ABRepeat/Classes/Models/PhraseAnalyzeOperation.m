@@ -26,7 +26,7 @@ static const CGFloat kProgressAfterCreateTempPCM = 1.0;
 
 @implementation PhraseAnalyzeOperation
 
-- (id)initWithMediaItem:(MPMediaItem *)mediaItem delegate:(id)delegate {
+- (instancetype)initWithMediaItem:(MPMediaItem *)mediaItem delegate:(id)delegate {
     self = [super init];
     if (self) {
         _mediaItem = mediaItem;

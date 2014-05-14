@@ -30,7 +30,7 @@ static const CGFloat kAnimationSettingRandomDistance = 0.05;
 
 @implementation SongCell
 
-- (id)initWithCoder:(NSCoder *)aDecoder {
+- (instancetype)initWithCoder:(NSCoder *)aDecoder {
     self = [super initWithCoder:aDecoder];
     if (self) {
         _isAnimation = NO;

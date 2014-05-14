@@ -18,7 +18,7 @@ extern const NSUInteger SongPlayerCurrentPlayingIndexStop;
 
 @property (nonatomic, assign, readonly) NSUInteger playingIndex;
 
-- (id)initWithDelegate:(id)delegate song:(Song *)song;
+- (instancetype)initWithDelegate:(id)delegate song:(Song *)song;
 
 - (void)playPhraseAtIndex:(NSUInteger)index;
 - (void)stop;

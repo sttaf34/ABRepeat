@@ -34,7 +34,7 @@
     return _coreDataManager;
 }
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     if (self) {
         NSURL *modelURL = [[NSBundle mainBundle] URLForResource:@"Model" withExtension:@"momd"];

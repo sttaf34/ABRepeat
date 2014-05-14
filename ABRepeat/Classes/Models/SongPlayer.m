@@ -32,7 +32,7 @@ const CGFloat kPlaySpeedDistance = 0.1;
 
 @implementation SongPlayer
 
-- (id)initWithDelegate:(id)delegate song:(Song *)song {
+- (instancetype)initWithDelegate:(id)delegate song:(Song *)song {
     self = [super init];
     if (self) {
         _delegate = delegate;

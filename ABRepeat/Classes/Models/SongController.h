@@ -14,7 +14,7 @@
 
 @interface SongController : NSObject
 
-- (id)initWithDelegate:(id)delegate;
+- (instancetype)initWithDelegate:(id)delegate;
 
 - (Song *)findSongByMediaItem:(MPMediaItem *)mediaItem;
 
