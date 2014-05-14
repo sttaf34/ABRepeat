@@ -4,6 +4,9 @@ before_install:
 - brew update
 - brew upgrade xctool
 
+before_script:
+  - export LANG=en_US.UTF-8
+
 xcode_project: ABRepeat.xcodeproj
 xcode_scheme: ABRepeat
 xcode_sdk: iphonesimulator7.1
