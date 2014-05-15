@@ -36,7 +36,7 @@ static const NSInteger kButtonPadding = 16;
 
     // Storyboardでは0.5pxの線が引けないのでコードで配置
     UIView *border = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 0.5)];
-    border.backgroundColor = [UIColor colorWithWhite:178.0 / 255 alpha:1];
+    border.backgroundColor = NAVIGATION_BAR_BORDER_BOTTOM_COLOR;
     [self.buttonsView addSubview:border];
 
     // 画面の最下部に配置されたボタンはハイライトが即座に反映されないので、ボトムのタップ領域は広げない

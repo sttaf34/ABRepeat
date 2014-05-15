@@ -11,7 +11,7 @@
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    [UINavigationBar appearance].titleTextAttributes = @{NSForegroundColorAttributeName: [UIColor colorWithWhite:44.0 / 255 alpha:1]};
+    [UINavigationBar appearance].titleTextAttributes = @{NSForegroundColorAttributeName: BLACK_TEXT_COLOR};
 
     return YES;
 }
