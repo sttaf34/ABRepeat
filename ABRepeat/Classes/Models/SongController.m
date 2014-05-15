@@ -107,4 +107,8 @@
     }];
 }
 
+- (void)phraseAnalyzeOperationDidCancel {
+
+}
+
 @end
