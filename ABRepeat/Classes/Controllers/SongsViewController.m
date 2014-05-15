@@ -38,7 +38,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 
-    MPMediaItem *mediaItem = self.mediaItemCollection.items[indexPath.row];
+    MPMediaItem *mediaItem = [self mediaItem:indexPath];
 
     Song *song = [self.songController findSongByMediaItem:mediaItem];
 
@@ -65,14 +65,15 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return self.mediaItemCollection.items.count;
+    return self.mediaItems.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *CellIdentifier = @"Cell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
-    MPMediaItem *mediaItem = self.mediaItemCollection.items[indexPath.row];
+    MPMediaItem *mediaItem = [self mediaItem:indexPath];
     cell.textLabel.text = [mediaItem valueForProperty:MPMediaItemPropertyTitle];
+    cell.textLabel.textColor = [UIColor colorWithWhite:44.0 / 255 alpha:1];
     return cell;
 }
 
@@ -90,6 +91,12 @@
 
 - (void)songControllerCreateSongDidError {
     self.progressView.titleLabelText = NSLocalizedString(@"SongsViewController songControllerCreateSongDidError", @"");
+}
+
+#pragma mark - Helper
+
+- (MPMediaItem *)mediaItem:(NSIndexPath *)indexPath {
+    return self.mediaItems[indexPath.row];
 }
 
 @end

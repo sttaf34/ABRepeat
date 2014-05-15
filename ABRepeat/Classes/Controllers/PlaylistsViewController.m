@@ -23,11 +23,11 @@
     self.playlists = [MPMediaQuery playlistsQuery].collections;
 }
 
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(MPMediaItemCollection *)sender {
     if ([segue.identifier isEqualToString:@"ToSongs"]) {
         SongsViewController *viewController = [segue destinationViewController];
 
-        viewController.mediaItemCollection = sender;
+        viewController.mediaItems = sender.items;
         viewController.navigationItem.title = [sender valueForProperty:MPMediaPlaylistPropertyName];
     }
 }

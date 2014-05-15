@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "SongsViewController.h"
 
-@interface SectionIndexSongsViewController : UITableViewController
+@interface SectionIndexSongsViewController : SongsViewController
 
 @end
