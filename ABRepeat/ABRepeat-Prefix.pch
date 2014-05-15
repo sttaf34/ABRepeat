@@ -15,4 +15,7 @@
     #import <Foundation/Foundation.h>
     #import <MediaPlayer/MediaPlayer.h>
     #import "SongController.h"
+
+    #define BLACK_TEXT_COLOR [UIColor colorWithWhite:44.0 / 255 alpha:1]
+    #define NAVIGATION_BAR_BORDER_BOTTOM_COLOR [UIColor colorWithWhite:178.0 / 255 alpha:1]
 #endif

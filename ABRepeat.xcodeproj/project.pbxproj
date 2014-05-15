@@ -12,7 +12,6 @@
 		520AE7CB1919F476001E24DF /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 520AE7C91919F476001E24DF /* Model.xcdatamodeld */; };
 		520AE7D41919F659001E24DF /* CoreDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 520AE7D31919F659001E24DF /* CoreDataManager.m */; };
 		520AE7D71919F77B001E24DF /* NSManagedObject+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = 520AE7D61919F77B001E24DF /* NSManagedObject+Helper.m */; };
-		520AE7F3191C551B001E24DF /* Phrase+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = 520AE7EC191C551B001E24DF /* Phrase+Helper.m */; };
 		520AE7F4191C551B001E24DF /* Phrase.m in Sources */ = {isa = PBXBuildFile; fileRef = 520AE7EE191C551B001E24DF /* Phrase.m */; };
 		520AE7F5191C551B001E24DF /* Song+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = 520AE7F0191C551B001E24DF /* Song+Helper.m */; };
 		520AE7F6191C551B001E24DF /* Song.m in Sources */ = {isa = PBXBuildFile; fileRef = 520AE7F2191C551B001E24DF /* Song.m */; };
@@ -42,6 +41,7 @@
 		52CDFD4C191E0AD500FC84CA /* SongsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 52CDFD4B191E0AD500FC84CA /* SongsViewController.m */; };
 		52CDFD5D191F273100FC84CA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 52CDFD5B191F273100FC84CA /* Main.storyboard */; };
 		52CDFD63191F28B500FC84CA /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 52CDFD65191F28B500FC84CA /* Localizable.strings */; };
+		52D5150C19246DFC00554AA0 /* NSString+NSTimeInterval.m in Sources */ = {isa = PBXBuildFile; fileRef = 52D5150B19246DFC00554AA0 /* NSString+NSTimeInterval.m */; };
 		AFAAFE826BFA4A46A06AE281 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 913D4C94EC864880B90FB80A /* libPods.a */; };
 /* End PBXBuildFile section */
 
@@ -65,8 +65,6 @@
 		520AE7D31919F659001E24DF /* CoreDataManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoreDataManager.m; sourceTree = "<group>"; };
 		520AE7D51919F77B001E24DF /* NSManagedObject+Helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSManagedObject+Helper.h"; sourceTree = "<group>"; };
 		520AE7D61919F77B001E24DF /* NSManagedObject+Helper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSManagedObject+Helper.m"; sourceTree = "<group>"; };
-		520AE7EB191C551B001E24DF /* Phrase+Helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Phrase+Helper.h"; sourceTree = "<group>"; };
-		520AE7EC191C551B001E24DF /* Phrase+Helper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Phrase+Helper.m"; sourceTree = "<group>"; };
 		520AE7ED191C551B001E24DF /* Phrase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Phrase.h; sourceTree = "<group>"; };
 		520AE7EE191C551B001E24DF /* Phrase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Phrase.m; sourceTree = "<group>"; };
 		520AE7EF191C551B001E24DF /* Song+Helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Song+Helper.h"; sourceTree = "<group>"; };
@@ -116,6 +114,8 @@
 		52CDFD60191F275500FC84CA /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		52CDFD64191F28B500FC84CA /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		52CDFD66191F28BB00FC84CA /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
+		52D5150A19246DFC00554AA0 /* NSString+NSTimeInterval.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+NSTimeInterval.h"; sourceTree = "<group>"; };
+		52D5150B19246DFC00554AA0 /* NSString+NSTimeInterval.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+NSTimeInterval.m"; sourceTree = "<group>"; };
 		913D4C94EC864880B90FB80A /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		FA0B24F28D3A43AFB946B9A3 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -148,8 +148,6 @@
 		520AE7EA191C551B001E24DF /* DataModels */ = {
 			isa = PBXGroup;
 			children = (
-				520AE7EB191C551B001E24DF /* Phrase+Helper.h */,
-				520AE7EC191C551B001E24DF /* Phrase+Helper.m */,
 				520AE7ED191C551B001E24DF /* Phrase.h */,
 				520AE7EE191C551B001E24DF /* Phrase.m */,
 				520AE7EF191C551B001E24DF /* Song+Helper.h */,
@@ -239,6 +237,7 @@
 			children = (
 				527A58A7190C26BF005DA746 /* AppDelegate.h */,
 				527A58A8190C26BF005DA746 /* AppDelegate.m */,
+				52D5150919246D8E00554AA0 /* Utilities */,
 				527A58A9190C26BF005DA746 /* Controllers */,
 				527A58AA190C26BF005DA746 /* Models */,
 				527A58AB190C26BF005DA746 /* Views */,
@@ -303,6 +302,15 @@
 				529A8DB91912541C0051DC94 /* he.m4a */,
 			);
 			path = Sounds;
+			sourceTree = "<group>";
+		};
+		52D5150919246D8E00554AA0 /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				52D5150A19246DFC00554AA0 /* NSString+NSTimeInterval.h */,
+				52D5150B19246DFC00554AA0 /* NSString+NSTimeInterval.m */,
+			);
+			path = Utilities;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -456,7 +464,6 @@
 				529A8DC6191298320051DC94 /* SongPlayer.m in Sources */,
 				520AE7F9191C5979001E24DF /* SongController.m in Sources */,
 				52CDFD49191E06CD00FC84CA /* AlbumsViewController.m in Sources */,
-				520AE7F3191C551B001E24DF /* Phrase+Helper.m in Sources */,
 				5224B5FC191F5AF8009BB1AF /* SongPlayerSettingStore.m in Sources */,
 				52CDFD46191DFC5E00FC84CA /* PlaylistsViewController.m in Sources */,
 				527A58B1190C299B005DA746 /* SectionIndexSongsViewController.m in Sources */,
@@ -465,6 +472,7 @@
 				527A58AC190C26BF005DA746 /* AppDelegate.m in Sources */,
 				529A8DBF191264360051DC94 /* SongViewController.m in Sources */,
 				527A5884190C26A2005DA746 /* main.m in Sources */,
+				52D5150C19246DFC00554AA0 /* NSString+NSTimeInterval.m in Sources */,
 				520AE7F4191C551B001E24DF /* Phrase.m in Sources */,
 				52CDFD43191D97D100FC84CA /* EasyTapButton.m in Sources */,
 				520AE7CB1919F476001E24DF /* Model.xcdatamodeld in Sources */,

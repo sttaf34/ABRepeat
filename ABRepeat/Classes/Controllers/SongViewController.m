@@ -10,8 +10,8 @@
 #import "SongCell.h"
 #import "EasyTapButton.h"
 #import "SongPlayer.h"
-#import "Phrase+Helper.h"
 #import "Song+Helper.h"
+#import "NSString+NSTimeInterval.h"
 
 static const NSInteger kButtonPadding = 16;
 
@@ -36,7 +36,7 @@ static const NSInteger kButtonPadding = 16;
 
     // Storyboardでは0.5pxの線が引けないのでコードで配置
     UIView *border = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 0.5)];
-    border.backgroundColor = [UIColor colorWithWhite:178.0 / 255 alpha:1];
+    border.backgroundColor = NAVIGATION_BAR_BORDER_BOTTOM_COLOR;
     [self.buttonsView addSubview:border];
 
     // 画面の最下部に配置されたボタンはハイライトが即座に反映されないので、ボトムのタップ領域は広げない
@@ -105,7 +105,7 @@ static const NSInteger kButtonPadding = 16;
 
 - (void)updateCell:(SongCell *)cell atIndexPath:(NSIndexPath *)indexPath {
     Phrase *phrase = self.song.sortedPhrases[indexPath.row];
-    cell.timeLabel.text = [NSString stringWithFormat:@"%02d:%02d.%02d", (int)phrase.startTimeMinute, (int)phrase.startTimeSecond, (int)phrase.startTime10Millisecond];
+    cell.timeLabel.text = [NSString minuteSecondString10MillisecondWithTimeInterval:phrase.startTime.doubleValue];
     [cell playingIndicatorWorking:(indexPath.row == self.songPlayer.playingIndex)];
 }
 

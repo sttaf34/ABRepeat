@@ -73,7 +73,7 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
     MPMediaItem *mediaItem = [self mediaItem:indexPath];
     cell.textLabel.text = [mediaItem valueForProperty:MPMediaItemPropertyTitle];
-    cell.textLabel.textColor = [UIColor colorWithWhite:44.0 / 255 alpha:1];
+    cell.textLabel.textColor = BLACK_TEXT_COLOR;
     return cell;
 }
 
