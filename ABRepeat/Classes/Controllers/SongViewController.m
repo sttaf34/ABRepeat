@@ -10,7 +10,6 @@
 #import "SongCell.h"
 #import "EasyTapButton.h"
 #import "SongPlayer.h"
-#import "Phrase+Helper.h"
 #import "Song+Helper.h"
 #import "NSString+NSTimeInterval.h"
 

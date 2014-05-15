@@ -12,7 +12,6 @@
 		520AE7CB1919F476001E24DF /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 520AE7C91919F476001E24DF /* Model.xcdatamodeld */; };
 		520AE7D41919F659001E24DF /* CoreDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 520AE7D31919F659001E24DF /* CoreDataManager.m */; };
 		520AE7D71919F77B001E24DF /* NSManagedObject+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = 520AE7D61919F77B001E24DF /* NSManagedObject+Helper.m */; };
-		520AE7F3191C551B001E24DF /* Phrase+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = 520AE7EC191C551B001E24DF /* Phrase+Helper.m */; };
 		520AE7F4191C551B001E24DF /* Phrase.m in Sources */ = {isa = PBXBuildFile; fileRef = 520AE7EE191C551B001E24DF /* Phrase.m */; };
 		520AE7F5191C551B001E24DF /* Song+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = 520AE7F0191C551B001E24DF /* Song+Helper.m */; };
 		520AE7F6191C551B001E24DF /* Song.m in Sources */ = {isa = PBXBuildFile; fileRef = 520AE7F2191C551B001E24DF /* Song.m */; };
@@ -66,8 +65,6 @@
 		520AE7D31919F659001E24DF /* CoreDataManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoreDataManager.m; sourceTree = "<group>"; };
 		520AE7D51919F77B001E24DF /* NSManagedObject+Helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSManagedObject+Helper.h"; sourceTree = "<group>"; };
 		520AE7D61919F77B001E24DF /* NSManagedObject+Helper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSManagedObject+Helper.m"; sourceTree = "<group>"; };
-		520AE7EB191C551B001E24DF /* Phrase+Helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Phrase+Helper.h"; sourceTree = "<group>"; };
-		520AE7EC191C551B001E24DF /* Phrase+Helper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Phrase+Helper.m"; sourceTree = "<group>"; };
 		520AE7ED191C551B001E24DF /* Phrase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Phrase.h; sourceTree = "<group>"; };
 		520AE7EE191C551B001E24DF /* Phrase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Phrase.m; sourceTree = "<group>"; };
 		520AE7EF191C551B001E24DF /* Song+Helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Song+Helper.h"; sourceTree = "<group>"; };
@@ -151,8 +148,6 @@
 		520AE7EA191C551B001E24DF /* DataModels */ = {
 			isa = PBXGroup;
 			children = (
-				520AE7EB191C551B001E24DF /* Phrase+Helper.h */,
-				520AE7EC191C551B001E24DF /* Phrase+Helper.m */,
 				520AE7ED191C551B001E24DF /* Phrase.h */,
 				520AE7EE191C551B001E24DF /* Phrase.m */,
 				520AE7EF191C551B001E24DF /* Song+Helper.h */,
@@ -469,7 +464,6 @@
 				529A8DC6191298320051DC94 /* SongPlayer.m in Sources */,
 				520AE7F9191C5979001E24DF /* SongController.m in Sources */,
 				52CDFD49191E06CD00FC84CA /* AlbumsViewController.m in Sources */,
-				520AE7F3191C551B001E24DF /* Phrase+Helper.m in Sources */,
 				5224B5FC191F5AF8009BB1AF /* SongPlayerSettingStore.m in Sources */,
 				52CDFD46191DFC5E00FC84CA /* PlaylistsViewController.m in Sources */,
 				527A58B1190C299B005DA746 /* SectionIndexSongsViewController.m in Sources */,

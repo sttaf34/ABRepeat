@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "Song+Helper.h"
-#import "Phrase+Helper.h"
+#import "Phrase.h"
 
 @protocol SongControllerDelegate;
 
