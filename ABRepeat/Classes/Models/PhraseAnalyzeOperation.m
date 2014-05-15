@@ -15,8 +15,6 @@ static const NSInteger kSoundExistenceBoundary = 100;
 static const NSInteger kSoundExistenceAverageReadPackets = 100;
 static const NSInteger k1SecondResolution = kTempSoundFileSampleRate / kSoundExistenceAverageReadPackets;
 
-static const CGFloat kProgressAfterCreateTempPCM = 1.0;
-
 @interface PhraseAnalyzeOperation ()
 
 @property (nonatomic, strong) MPMediaItem *mediaItem;
@@ -60,84 +58,64 @@ static const CGFloat kProgressAfterCreateTempPCM = 1.0;
     return phraseStartTimes;
 }
 
+- (void)executeDelegateAfterCalculateProgress:(NSInteger)currentCount aboutMaxCount:(NSInteger)abountMaxCount {
+    CGFloat progress = (CGFloat)currentCount / abountMaxCount;
+    if (progress > 1) progress = 1.0;
+    [self.delegate phraseAnalyzeOperationDidChangeProgress:progress];
+}
+
+- (NSInteger)aboutMaxLoopCount:(ExtAudioFileRef)audioFileRef {
+    UInt64 fileLengthFrames;
+    UInt32 size = sizeof(SInt64);
+    ExtAudioFileGetProperty(audioFileRef, kExtAudioFileProperty_FileLengthFrames, &size, &fileLengthFrames);
+    return (fileLengthFrames * kTempSoundFileSampleRate / 44100.0) / kTempSoundFileReadFrame;
+}
+
 - (NSURL *)createTempPCMData:(NSURL *)songURL {
     NSURL *tempFileURL = [self tempWAVFileURL];
     AudioStreamBasicDescription outputFormat = [self tempWAVFileFormat];
     OSStatus error;
     ExtAudioFileRef infile, outfile = NULL;
 
-    error = ExtAudioFileOpenURL((__bridge CFURLRef)songURL, &infile);
-    if (error) goto ERROR_HANDLING;
-
-    error = ExtAudioFileSetProperty(infile,
-                                    kExtAudioFileProperty_ClientDataFormat,
-                                    sizeof(AudioStreamBasicDescription),
-                                    &outputFormat);
-    if (error) goto ERROR_HANDLING;
-
-    error = ExtAudioFileCreateWithURL((__bridge CFURLRef)tempFileURL,
-                                      kAudioFileWAVEType,
-                                      &outputFormat,
-                                      NULL,
-                                      kAudioFileFlags_EraseFile,
-                                      &outfile);
-ERROR_HANDLING:
-    if (error) {
-        NSLog(@"%s %d", __PRETTY_FUNCTION__, __LINE__);
-        ExtAudioFileDispose(infile);
-        ExtAudioFileDispose(outfile);
-        return nil;
-    }
-
+    // AudioBufferListの作成
     UInt32 readFrameSize = kTempSoundFileReadFrame;
     UInt32 bufferSize = sizeof(char) * readFrameSize * outputFormat.mBytesPerPacket;
     char *buffer = malloc(bufferSize);
-
     AudioBufferList audioBufferList;
     audioBufferList.mNumberBuffers = 1;
     audioBufferList.mBuffers[0].mNumberChannels = outputFormat.mChannelsPerFrame;
     audioBufferList.mBuffers[0].mDataByteSize = bufferSize;
     audioBufferList.mBuffers[0].mData = buffer;
 
-    // ファイル変換の途中経過を通知する用
-    // TODO: 計算式が分からないのでマジックナンバーになっているのを何とかする
-    UInt64 fileLengthFrames = 0;
-    UInt32 size = sizeof(SInt64);
-    ExtAudioFileGetProperty(infile, kExtAudioFileProperty_FileLengthFrames, &size, &fileLengthFrames);
-    UInt64 aboutLoopCount = fileLengthFrames / 4500 / 4;
+    error = ExtAudioFileOpenURL((__bridge CFURLRef)songURL, &infile);
+    if (error) goto ERROR_HANDLING;
+    error = ExtAudioFileSetProperty(infile, kExtAudioFileProperty_ClientDataFormat, sizeof(AudioStreamBasicDescription), &outputFormat);
+    if (error) goto ERROR_HANDLING;
+    error = ExtAudioFileCreateWithURL((__bridge CFURLRef)tempFileURL, kAudioFileWAVEType, &outputFormat, NULL, kAudioFileFlags_EraseFile, &outfile);
+    if (error) goto ERROR_HANDLING;
 
-    BOOL isSuccess = NO;
-    int currentLoopCount = 0;
+    NSInteger aboutMaxLoopCount = [self aboutMaxLoopCount:infile];
+    NSInteger currentLoopCount = 0;
     while (1) {
-        currentLoopCount++;
-        float progress = (float)currentLoopCount / aboutLoopCount * kProgressAfterCreateTempPCM;
-        if (progress > 1) progress = 1.0;
-        [self.delegate phraseAnalyzeOperationDidChangeProgress:progress];
-
         if (self.isCancelled) break;
+        [self executeDelegateAfterCalculateProgress:++currentLoopCount aboutMaxCount:aboutMaxLoopCount];
 
-        readFrameSize = kTempSoundFileReadFrame;
         error = ExtAudioFileRead(infile, &readFrameSize, &audioBufferList);
-        if (error) break;
-
-        if (readFrameSize == 0) {
-            isSuccess = YES;
-            break;
-        }
-
+        if (error) goto ERROR_HANDLING;
+        if (readFrameSize == 0) break;
         error = ExtAudioFileWrite(outfile, readFrameSize, &audioBufferList);
-        if (error) break;
+        if (error) goto ERROR_HANDLING;
     }
 
+ERROR_HANDLING:
     ExtAudioFileDispose(infile);
     ExtAudioFileDispose(outfile);
     free(buffer);
-
-    if (!isSuccess) {
-        NSLog(@"%s %d", __PRETTY_FUNCTION__, __LINE__);
+    if (error) {
         return nil;
+    } else {
+        return tempFileURL;
     }
-    return tempFileURL;
 }
 
 - (NSArray *)soundExistenceArrayPer10Millisecond:(NSURL *)PCMFileURL {
