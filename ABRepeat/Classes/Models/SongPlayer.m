@@ -11,6 +11,7 @@
 #import "Phrase.h"
 #import "Song+Helper.h"
 #import "SongPlayerSettingStore.h"
+#import "NSString+NSTimeInterval.h"
 
 const NSUInteger SongPlayerCurrentPlayingIndexStop = NSUIntegerMax;
 const CGFloat kPlaySpeedMin = 0.5;
@@ -147,12 +148,8 @@ const CGFloat kPlaySpeedDistance = 0.1;
 #pragma mark - Timer
 
 - (void)checkCurrentTime {
-    int currentMinute = (int)self.player.currentTime / 60;
-    int currentSecond = (int)self.player.currentTime % 60;
-    int totalMinute   = (int)self.player.duration / 60;
-    int totalSecond   = (int)self.player.duration % 60;
-    NSString *time = [NSString stringWithFormat:@"%02d:%02d / %02d:%02d", currentMinute, currentSecond, totalMinute, totalSecond];
-    [self.delegate songPlayerChangeTIme:time];
+    NSString *timeString = [NSString minuteSecondX2StringWithTimeIntervalLeft:self.player.currentTime intervalRight:self.player.duration];
+    [self.delegate songPlayerChangeTIme:timeString];
 }
 
 - (void)checkPlayingIndex {
