@@ -10,6 +10,6 @@
 
 @interface SongsViewController : UITableViewController
 
-@property (nonatomic, strong) MPMediaItemCollection *mediaItemCollection;
+@property (nonatomic, copy) NSArray *mediaItems;
 
 @end

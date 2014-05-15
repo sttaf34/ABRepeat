@@ -23,12 +23,12 @@
     self.albums = [MPMediaQuery albumsQuery].collections;
 }
 
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(MPMediaItemCollection *)sender {
     if ([segue.identifier isEqualToString:@"ToSongs"]) {
         SongsViewController *viewController = [segue destinationViewController];
-        viewController.mediaItemCollection = sender;
+        viewController.mediaItems = sender.items;
 
-        MPMediaItem *mediaItem = [(MPMediaItemCollection *)sender representativeItem];
+        MPMediaItem *mediaItem = [sender representativeItem];
         viewController.navigationItem.title = [mediaItem valueForProperty:MPMediaItemPropertyAlbumTitle];
     }
 }
