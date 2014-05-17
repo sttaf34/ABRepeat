@@ -33,25 +33,24 @@ typedef NS_ENUM(NSInteger, CurrentWorking) {
 
 @interface PhraseAnalyzeOperation ()
 
-@property (nonatomic, strong) MPMediaItem *mediaItem;
+@property (nonatomic, strong) NSURL *URL;
 @property (weak, nonatomic) id<PhraseAnalyzeOperationDelegate> delegate;
 
 @end
 
 @implementation PhraseAnalyzeOperation
 
-- (instancetype)initWithMediaItem:(MPMediaItem *)mediaItem delegate:(id)delegate {
+- (instancetype)initWithURL:(NSURL *)URL delegate:(id)delegate {
     self = [super init];
     if (self) {
-        _mediaItem = mediaItem;
+        _URL       = URL;
         _delegate  = delegate;
     }
     return self;
 }
 
 - (void)main {
-    NSURL *songURL = [self.mediaItem valueForProperty:MPMediaItemPropertyAssetURL];
-    NSURL *tempPCMFileURL = [self createTempPCMData:songURL];
+    NSURL *tempPCMFileURL = [self createTempPCMData:self.URL];
     if (!tempPCMFileURL) {
         [self executeDelegateErrorOrCancel];
         return;

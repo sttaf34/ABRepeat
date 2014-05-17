@@ -12,7 +12,7 @@
 
 @interface PhraseAnalyzeOperation : NSOperation
 
-- (instancetype)initWithMediaItem:(MPMediaItem *)mediaItem delegate:(id)delegate;
+- (instancetype)initWithURL:(NSURL *)URL delegate:(id)delegate;
 
 @end
 

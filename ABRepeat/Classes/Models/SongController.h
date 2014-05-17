@@ -10,23 +10,21 @@
 #import "Song+Helper.h"
 #import "Phrase.h"
 
-@protocol SongControllerDelegate;
+typedef void (^createSongProgressBlock)(CGFloat progress);
+typedef void (^createSongFinishBlock)(NSURL *URL);
+typedef void (^createSongErrorBlock)(NSError *error);
 
 @interface SongController : NSObject
 
-- (instancetype)initWithDelegate:(id)delegate;
+- (instancetype)init;
 
+- (Song *)findSongByURL:(NSURL *)URL;
 - (Song *)findSongByMediaItem:(MPMediaItem *)mediaItem;
 
-- (void)startCreateSongFromMediaItem:(MPMediaItem *)mediaItem;
+- (void)startCreateSongWithURL:(NSURL *)URL
+                 progressBlock:(createSongProgressBlock)progressBlock
+                   finishBlock:(createSongFinishBlock)finishBlock
+                    errorBlock:(createSongErrorBlock)errorBlock;
 - (void)cancelCreateSong;
-
-@end
-
-@protocol SongControllerDelegate <NSObject>
-
-- (void)songControllerCreateSongDidChangeProgress:(CGFloat)progress;
-- (void)songControllerCreateSongDidFinish:(MPMediaItem *)mediaItem;
-- (void)songControllerCreateSongDidError;
 
 @end
