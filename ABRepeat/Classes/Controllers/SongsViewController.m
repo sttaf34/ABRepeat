@@ -46,20 +46,19 @@
     }
 
     createSongProgressBlock progressBlock = ^(CGFloat progress){ self.progressView.progress = progress; };
-    createSongFinishBlock finishBlock = ^(MPMediaItem *mediaItem){
+    createSongFinishBlock finishBlock = ^(NSURL *URL){
         self.progressView.progress = 1.0;
         [self.progressView dismiss:YES];
-        Song *song = [self.songController findSongByMediaItem:mediaItem];
+        Song *song = [self.songController findSongByURL:URL];
         [self performSegueWithIdentifier:@"ToSong" sender:song];
     };
     createSongErrorBlock errorBlock = ^(NSError *error){
         self.progressView.titleLabelText = NSLocalizedString(@"SongsViewController songControllerCreateSongDidError", @"");
     };
-
-    [self.songController startCreateSongFromMediaItem:mediaItem
-                                        progressBlock:progressBlock
-                                          finishBlock:finishBlock
-                                           errorBlock:errorBlock];
+    [self.songController startCreateSongWithURL:[mediaItem valueForProperty:MPMediaItemPropertyAssetURL]
+                                  progressBlock:progressBlock
+                                    finishBlock:finishBlock
+                                     errorBlock:errorBlock];
 
     __weak SongController *weakSongController = self.songController;
     self.progressView = [MRProgressOverlayView new];

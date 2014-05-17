@@ -11,19 +11,20 @@
 #import "Phrase.h"
 
 typedef void (^createSongProgressBlock)(CGFloat progress);
-typedef void (^createSongFinishBlock)(MPMediaItem *mediaItem);
+typedef void (^createSongFinishBlock)(NSURL *URL);
 typedef void (^createSongErrorBlock)(NSError *error);
 
 @interface SongController : NSObject
 
 - (instancetype)init;
 
+- (Song *)findSongByURL:(NSURL *)URL;
 - (Song *)findSongByMediaItem:(MPMediaItem *)mediaItem;
 
-- (void)startCreateSongFromMediaItem:(MPMediaItem *)mediaItem
-                       progressBlock:(createSongProgressBlock)progressBlock
-                         finishBlock:(createSongFinishBlock)finishBlock
-                          errorBlock:(createSongErrorBlock)errorBlock;
+- (void)startCreateSongWithURL:(NSURL *)URL
+                 progressBlock:(createSongProgressBlock)progressBlock
+                   finishBlock:(createSongFinishBlock)finishBlock
+                    errorBlock:(createSongErrorBlock)errorBlock;
 - (void)cancelCreateSong;
 
 @end

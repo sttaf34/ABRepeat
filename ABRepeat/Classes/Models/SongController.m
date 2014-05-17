@@ -13,7 +13,7 @@
 @interface SongController () <PhraseAnalyzeOperationDelegate>
 
 @property (nonatomic, strong) NSOperationQueue *operationQueue;
-@property (nonatomic, strong) MPMediaItem *currentSongCreateMediaItem;
+@property (nonatomic, strong) NSURL *currentSongCreateURL;
 
 @property (nonatomic, copy) createSongProgressBlock progressBlock;
 @property (nonatomic, copy) createSongFinishBlock finishBlock;
@@ -31,13 +31,13 @@
     return self;
 }
 
-- (void)startCreateSongFromMediaItem:(MPMediaItem *)mediaItem
-                       progressBlock:(createSongProgressBlock)progressBlock
-                         finishBlock:(createSongFinishBlock)finishBlock
-                          errorBlock:(createSongErrorBlock)errorBlock {
-    self.currentSongCreateMediaItem = mediaItem;
-    PhraseAnalyzeOperation *opetation = [[PhraseAnalyzeOperation alloc] initWithMediaItem:mediaItem delegate:self];
-    [self.operationQueue addOperation:opetation];
+- (void)startCreateSongWithURL:(NSURL *)URL
+                 progressBlock:(createSongProgressBlock)progressBlock
+                   finishBlock:(createSongFinishBlock)finishBlock
+                    errorBlock:(createSongErrorBlock)errorBlock {
+    self.currentSongCreateURL = URL;
+    PhraseAnalyzeOperation *operation = [[PhraseAnalyzeOperation alloc] initWithURL:URL delegate:self];
+    [self.operationQueue addOperation:operation];
 
     self.progressBlock = progressBlock;
     self.finishBlock   = finishBlock;
@@ -48,13 +48,11 @@
     [self.operationQueue cancelAllOperations];
 }
 
-- (Song *)findSongByMediaItem:(MPMediaItem *)mediaItem {
+- (Song *)findSongByURL:(NSURL *)URL {
     NSManagedObjectContext *context = [CoreDataManager sharedManager].managedObjectContext;
-
-    NSURL *songURL = [mediaItem valueForProperty:MPMediaItemPropertyAssetURL];
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:[Song entityName]];
     [request setFetchLimit:1];
-    [request setPredicate:[NSPredicate predicateWithFormat:@"songURL == %@", songURL.absoluteString]];
+    [request setPredicate:[NSPredicate predicateWithFormat:@"songURL == %@", URL.absoluteString]];
 
     NSError *error;
     NSArray *songs = [context executeFetchRequest:request error:&error];
@@ -66,6 +64,11 @@
     } else {
         return songs[0];
     }
+}
+
+- (Song *)findSongByMediaItem:(MPMediaItem *)mediaItem {
+    NSURL *songURL = [mediaItem valueForProperty:MPMediaItemPropertyAssetURL];
+    return [self findSongByURL:songURL];
 }
 
 #pragma mark - PhraseAnalyzeOperationDelegate
@@ -96,16 +99,14 @@
         Song *song = [NSEntityDescription insertNewObjectForEntityForName:[Song entityName]
                                                    inManagedObjectContext:context];
         song.phrases = [NSSet setWithArray:phrases.copy];
-        NSURL *songURL = [self.currentSongCreateMediaItem valueForProperty:MPMediaItemPropertyAssetURL];
-        song.songURL = songURL.absoluteString;
-        song.title   = [self.currentSongCreateMediaItem valueForProperty:MPMediaItemPropertyTitle];
-        
+        song.songURL = self.currentSongCreateURL.absoluteString;
+
         NSError *error;
         [context save:&error];
         if (error) NSLog(@"%@", error);
 
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-            self.finishBlock(self.currentSongCreateMediaItem);
+            self.finishBlock(self.currentSongCreateURL);
         }];
     }];
 }
