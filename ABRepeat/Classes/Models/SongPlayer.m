@@ -148,7 +148,9 @@ const CGFloat kPlaySpeedDistance = 0.1;
 #pragma mark - Timer
 
 - (void)checkCurrentTime {
-    NSString *timeString = [NSString minuteSecondX2StringWithTimeIntervalLeft:self.player.currentTime intervalRight:self.player.duration];
+    NSString *leftString  = [NSString minuteSecondStringWithTimeInterval:self.player.currentTime];
+    NSString *rightString = [NSString minuteSecondStringWithTimeInterval:self.player.duration];
+    NSString *timeString  = [NSString stringWithFormat:@"%@ / %@", leftString, rightString];
     [self.delegate songPlayerChangeTIme:timeString];
 }
 

@@ -12,7 +12,5 @@
 
 + (NSString *)minuteSecondStringWithTimeInterval:(NSTimeInterval)interval;
 + (NSString *)minuteSecondString10MillisecondWithTimeInterval:(NSTimeInterval)interval;
-+ (NSString *)minuteSecondX2StringWithTimeIntervalLeft:(NSTimeInterval)left
-                                         intervalRight:(NSTimeInterval)right;
 
 @end

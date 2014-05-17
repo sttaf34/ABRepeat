@@ -11,25 +11,17 @@
 @implementation NSString (NSTimeInterval)
 
 + (NSString *)minuteSecondStringWithTimeInterval:(NSTimeInterval)interval {
+    if (interval < 0) return @"00:00";
     int minute = (int)interval / 60;
     int second = (int)interval % 60;
     return [NSString stringWithFormat:@"%02d:%02d", minute, second];
 }
 
 + (NSString *)minuteSecondString10MillisecondWithTimeInterval:(NSTimeInterval)interval {
-    int minute = (int)interval / 60;
-    int second = (int)interval % 60;
+    if (interval < 0) return @"00:00:00";
+    NSString *minuteSecond = [[self class] minuteSecondStringWithTimeInterval:interval];
     int a100Milisecond = (int)(interval * 100) % 100;
-    return [NSString stringWithFormat:@"%02d:%02d:%02d", minute, second, a100Milisecond];
-}
-
-+ (NSString *)minuteSecondX2StringWithTimeIntervalLeft:(NSTimeInterval)left
-                                         intervalRight:(NSTimeInterval)right {
-    int leftMinute = (int)left / 60;
-    int leftSecond = (int)left % 60;
-    int rightMinute = (int)right / 60;
-    int rightSecond = (int)right % 60;
-    return [NSString stringWithFormat:@"%02d:%02d / %02d:%02d", leftMinute, leftSecond, rightMinute, rightSecond];
+    return [NSString stringWithFormat:@"%@:%02d", minuteSecond, a100Milisecond];
 }
 
 @end
