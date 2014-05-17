@@ -12,27 +12,36 @@
 
 @interface SongController () <PhraseAnalyzeOperationDelegate>
 
-@property (nonatomic, weak) id <SongControllerDelegate> delegate;
 @property (nonatomic, strong) NSOperationQueue *operationQueue;
 @property (nonatomic, strong) MPMediaItem *currentSongCreateMediaItem;
+
+@property (nonatomic, copy) createSongProgressBlock progressBlock;
+@property (nonatomic, copy) createSongFinishBlock finishBlock;
+@property (nonatomic, copy) createSongErrorBlock errorBlock;
 
 @end
 
 @implementation SongController
 
-- (instancetype)initWithDelegate:(id)delegate {
+- (instancetype)init {
     self = [super init];
     if (self) {
-        _delegate = delegate;
         _operationQueue = [NSOperationQueue new];
     }
     return self;
 }
 
-- (void)startCreateSongFromMediaItem:(MPMediaItem *)mediaItem {
+- (void)startCreateSongFromMediaItem:(MPMediaItem *)mediaItem
+                       progressBlock:(createSongProgressBlock)progressBlock
+                         finishBlock:(createSongFinishBlock)finishBlock
+                          errorBlock:(createSongErrorBlock)errorBlock {
     self.currentSongCreateMediaItem = mediaItem;
     PhraseAnalyzeOperation *opetation = [[PhraseAnalyzeOperation alloc] initWithMediaItem:mediaItem delegate:self];
     [self.operationQueue addOperation:opetation];
+
+    self.progressBlock = progressBlock;
+    self.finishBlock   = finishBlock;
+    self.errorBlock    = errorBlock;
 }
 
 - (void)cancelCreateSong {
@@ -63,8 +72,7 @@
 
 - (void)phraseAnalyzeOperationDidChangeProgress:(CGFloat)progress {
     [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-        [self.delegate songControllerCreateSongDidChangeProgress:progress];
-        NSLog(@"%f", progress);
+        self.progressBlock(progress);
     }];
 }
 
@@ -97,14 +105,14 @@
         if (error) NSLog(@"%@", error);
 
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-            [self.delegate songControllerCreateSongDidFinish:self.currentSongCreateMediaItem];
+            self.finishBlock(self.currentSongCreateMediaItem);
         }];
     }];
 }
 
 - (void)phraseAnalyzeOperationDidError {
     [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-        [self.delegate songControllerCreateSongDidError];
+        self.errorBlock(nil);
     }];
 }
 

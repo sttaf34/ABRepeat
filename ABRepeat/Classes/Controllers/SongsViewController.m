@@ -21,7 +21,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    self.songController = [[SongController alloc] initWithDelegate:self];
+    self.songController = [[SongController alloc] init];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
@@ -37,25 +37,39 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-
     MPMediaItem *mediaItem = [self mediaItem:indexPath];
 
     Song *song = [self.songController findSongByMediaItem:mediaItem];
-
     if (song) {
         [self performSegueWithIdentifier:@"ToSong" sender:song];
-    } else {
-        [self.songController startCreateSongFromMediaItem:mediaItem];
-        __weak SongController *weakSongController = self.songController;
-        self.progressView = [MRProgressOverlayView new];
-        self.progressView.mode = MRProgressOverlayViewModeDeterminateCircular;
-        self.progressView.stopBlock = ^(MRProgressOverlayView *view) {
-            [weakSongController cancelCreateSong];
-            [view dismiss:YES];
-        };
-        [self.view.window addSubview:self.progressView];
-        [self.progressView show:YES];
+        return;
     }
+
+    createSongProgressBlock progressBlock = ^(CGFloat progress){ self.progressView.progress = progress; };
+    createSongFinishBlock finishBlock = ^(MPMediaItem *mediaItem){
+        self.progressView.progress = 1.0;
+        [self.progressView dismiss:YES];
+        Song *song = [self.songController findSongByMediaItem:mediaItem];
+        [self performSegueWithIdentifier:@"ToSong" sender:song];
+    };
+    createSongErrorBlock errorBlock = ^(NSError *error){
+        self.progressView.titleLabelText = NSLocalizedString(@"SongsViewController songControllerCreateSongDidError", @"");
+    };
+
+    [self.songController startCreateSongFromMediaItem:mediaItem
+                                        progressBlock:progressBlock
+                                          finishBlock:finishBlock
+                                           errorBlock:errorBlock];
+
+    __weak SongController *weakSongController = self.songController;
+    self.progressView = [MRProgressOverlayView new];
+    self.progressView.mode = MRProgressOverlayViewModeDeterminateCircular;
+    self.progressView.stopBlock = ^(MRProgressOverlayView *view) {
+        [weakSongController cancelCreateSong];
+        [view dismiss:YES];
+    };
+    [self.view.window addSubview:self.progressView];
+    [self.progressView show:YES];
 }
 
 #pragma mark - TableViewDataSource
@@ -75,23 +89,6 @@
     cell.textLabel.text = [mediaItem valueForProperty:MPMediaItemPropertyTitle];
     cell.textLabel.textColor = BLACK_TEXT_COLOR;
     return cell;
-}
-
-#pragma mark - SongControllerDelegate
-
-- (void)songControllerCreateSongDidChangeProgress:(CGFloat)progress {
-    self.progressView.progress = progress;
-}
-
-- (void)songControllerCreateSongDidFinish:(MPMediaItem *)mediaItem {
-    self.progressView.progress = 1.0;
-    [self.progressView dismiss:YES];
-    Song *song = [self.songController findSongByMediaItem:mediaItem];
-    [self performSegueWithIdentifier:@"ToSong" sender:song];
-}
-
-- (void)songControllerCreateSongDidError {
-    self.progressView.titleLabelText = NSLocalizedString(@"SongsViewController songControllerCreateSongDidError", @"");
 }
 
 #pragma mark - Helper
