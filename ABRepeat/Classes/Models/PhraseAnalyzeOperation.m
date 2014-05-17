@@ -16,9 +16,13 @@ static const NSInteger kSoundExistenceAverageReadPackets = 100;
 static const NSInteger k1SecondResolution = kTempSoundFileSampleRate / kSoundExistenceAverageReadPackets;
 
 // それぞれのメソッド終了後の進行状況の値
-static const CGFloat kProgressAfterCreateTempPCM = 0.9;
-static const CGFloat kProgressAfterSoundExistenceArray = 0.95;
+static const CGFloat kProgressAfterCreateTempPCM = 0.5;
+static const CGFloat kProgressAfterSoundExistenceArray = 0.9;
 static const CGFloat kProgressAfterPhraseStartTimes = 1.0;
+
+// それぞれのメソッドの進行状況通知の頻度
+static const NSInteger kProgressFrequencySoundExistenceArray = 5000;
+static const NSInteger kProgressFrequencyPhraseStartTimes = 100;
 
 typedef NS_ENUM(NSInteger, CurrentWorking) {
     CurrentWorkingCreateTempPCM,
@@ -139,10 +143,13 @@ ERROR_HANDLING:
 
     UInt32 ioNumPackets = kSoundExistenceAverageReadPackets;
     short buffer[kSoundExistenceAverageReadPackets] = {0};
+    NSLog(@"%s loopCount -> %d", __PRETTY_FUNCTION__, (int)packetCount);
     for (int i = 0; i < packetCount; i += kSoundExistenceAverageReadPackets) {
         if (self.isCancelled) goto ERROR_AND_CANCEL_HANDLING;
-//        [self executeDelegateAfterCalculateProgress:i aboutMaxCount:(NSInteger)packetCount - 1
-//                                     currentWorking:CurrentWorkingSoundExistenceArray];
+        if (i % kProgressFrequencySoundExistenceArray == 0) {
+            [self executeDelegateAfterCalculateProgress:i aboutMaxCount:(NSInteger)packetCount - 1
+                                         currentWorking:CurrentWorkingSoundExistenceArray];
+        }
 
         error = AudioFileReadPackets(audioFileID, NO, NULL, NULL, i, &ioNumPackets, &buffer);
         if (error) goto ERROR_AND_CANCEL_HANDLING;
@@ -184,10 +191,13 @@ static const NSInteger kSoundExistenceJudgeCountYES = 10;
     // NOがkSoundExistenceJudgeCountNO個、YESがkSoundExistenceJudgeCountYES個並んだ場合の時間を
     // phraseBeginTimeとしている
     NSInteger loopCount = soundExistenceArray.count - kSoundExistenceJudgeCountNO - kSoundExistenceJudgeCountYES;
+    NSLog(@"%s loopCount -> %d", __PRETTY_FUNCTION__, (int)loopCount);
     for (int i = 0; i < loopCount; i++) {
         if (self.isCancelled) return nil;
-        [self executeDelegateAfterCalculateProgress:i aboutMaxCount:loopCount - 1
-                                     currentWorking:CurrentWorkingPhraseStartTimes];
+        if (i % kProgressFrequencyPhraseStartTimes == 0) {
+            [self executeDelegateAfterCalculateProgress:i aboutMaxCount:loopCount - 1
+                                         currentWorking:CurrentWorkingPhraseStartTimes];
+        }
 
         BOOL isSoundExistence = [(NSNumber *)soundExistenceArray[i] boolValue];
         if (isSoundExistence) continue;
