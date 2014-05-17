@@ -31,9 +31,6 @@
 		527A58B1190C299B005DA746 /* SectionIndexSongsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 527A58B0190C299B005DA746 /* SectionIndexSongsViewController.m */; };
 		528B3CCE1928288F007F04B5 /* test_sound.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 528B3CCC1928288F007F04B5 /* test_sound.aiff */; };
 		528B3CCF1928288F007F04B5 /* test_sound.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 528B3CCD1928288F007F04B5 /* test_sound.m4a */; };
-		529A8DB7191250480051DC94 /* loop.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 529A8DB5191250480051DC94 /* loop.mp3 */; };
-		529A8DB8191250480051DC94 /* sine.aif in Resources */ = {isa = PBXBuildFile; fileRef = 529A8DB6191250480051DC94 /* sine.aif */; };
-		529A8DBA1912541C0051DC94 /* he.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 529A8DB91912541C0051DC94 /* he.m4a */; };
 		529A8DBF191264360051DC94 /* SongViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 529A8DBE191264360051DC94 /* SongViewController.m */; };
 		529A8DC6191298320051DC94 /* SongPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 529A8DC5191298320051DC94 /* SongPlayer.m */; };
 		52B0B5F7192714F600194FED /* NSStringNSTimeIntervalTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 52B0B5F6192714F600194FED /* NSStringNSTimeIntervalTests.m */; };
@@ -97,9 +94,6 @@
 		527A58B0190C299B005DA746 /* SectionIndexSongsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SectionIndexSongsViewController.m; sourceTree = "<group>"; };
 		528B3CCC1928288F007F04B5 /* test_sound.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = test_sound.aiff; sourceTree = "<group>"; };
 		528B3CCD1928288F007F04B5 /* test_sound.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = test_sound.m4a; sourceTree = "<group>"; };
-		529A8DB5191250480051DC94 /* loop.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = loop.mp3; sourceTree = "<group>"; };
-		529A8DB6191250480051DC94 /* sine.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = sine.aif; sourceTree = "<group>"; };
-		529A8DB91912541C0051DC94 /* he.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = he.m4a; sourceTree = "<group>"; };
 		529A8DBD191264360051DC94 /* SongViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SongViewController.h; sourceTree = "<group>"; };
 		529A8DBE191264360051DC94 /* SongViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SongViewController.m; sourceTree = "<group>"; };
 		529A8DC4191298320051DC94 /* SongPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SongPlayer.h; sourceTree = "<group>"; };
@@ -202,7 +196,6 @@
 				52CDFD5B191F273100FC84CA /* Main.storyboard */,
 				527A5889190C26A2005DA746 /* Images.xcassets */,
 				527A58A6190C26BF005DA746 /* Classes */,
-				529A8DB4191250480051DC94 /* Sounds */,
 				527A587E190C26A2005DA746 /* Supporting Files */,
 			);
 			path = ABRepeat;
@@ -311,16 +304,6 @@
 			path = Sounds;
 			sourceTree = "<group>";
 		};
-		529A8DB4191250480051DC94 /* Sounds */ = {
-			isa = PBXGroup;
-			children = (
-				529A8DB5191250480051DC94 /* loop.mp3 */,
-				529A8DB6191250480051DC94 /* sine.aif */,
-				529A8DB91912541C0051DC94 /* he.m4a */,
-			);
-			path = Sounds;
-			sourceTree = "<group>";
-		};
 		52D5150919246D8E00554AA0 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
@@ -416,13 +399,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				529A8DB7191250480051DC94 /* loop.mp3 in Resources */,
 				527A5882190C26A2005DA746 /* InfoPlist.strings in Resources */,
-				529A8DBA1912541C0051DC94 /* he.m4a in Resources */,
 				52CDFD63191F28B500FC84CA /* Localizable.strings in Resources */,
 				52CDFD5D191F273100FC84CA /* Main.storyboard in Resources */,
 				527A588A190C26A2005DA746 /* Images.xcassets in Resources */,
-				529A8DB8191250480051DC94 /* sine.aif in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
