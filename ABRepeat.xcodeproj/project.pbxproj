@@ -29,6 +29,8 @@
 		527A589B190C26A2005DA746 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 527A5899190C26A2005DA746 /* InfoPlist.strings */; };
 		527A58AC190C26BF005DA746 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 527A58A8190C26BF005DA746 /* AppDelegate.m */; };
 		527A58B1190C299B005DA746 /* SectionIndexSongsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 527A58B0190C299B005DA746 /* SectionIndexSongsViewController.m */; };
+		528B3CCE1928288F007F04B5 /* test_sound.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 528B3CCC1928288F007F04B5 /* test_sound.aiff */; };
+		528B3CCF1928288F007F04B5 /* test_sound.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 528B3CCD1928288F007F04B5 /* test_sound.m4a */; };
 		529A8DB7191250480051DC94 /* loop.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 529A8DB5191250480051DC94 /* loop.mp3 */; };
 		529A8DB8191250480051DC94 /* sine.aif in Resources */ = {isa = PBXBuildFile; fileRef = 529A8DB6191250480051DC94 /* sine.aif */; };
 		529A8DBA1912541C0051DC94 /* he.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 529A8DB91912541C0051DC94 /* he.m4a */; };
@@ -93,6 +95,8 @@
 		527A58A8190C26BF005DA746 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		527A58AF190C299B005DA746 /* SectionIndexSongsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SectionIndexSongsViewController.h; sourceTree = "<group>"; };
 		527A58B0190C299B005DA746 /* SectionIndexSongsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SectionIndexSongsViewController.m; sourceTree = "<group>"; };
+		528B3CCC1928288F007F04B5 /* test_sound.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = test_sound.aiff; sourceTree = "<group>"; };
+		528B3CCD1928288F007F04B5 /* test_sound.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = test_sound.m4a; sourceTree = "<group>"; };
 		529A8DB5191250480051DC94 /* loop.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = loop.mp3; sourceTree = "<group>"; };
 		529A8DB6191250480051DC94 /* sine.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = sine.aif; sourceTree = "<group>"; };
 		529A8DB91912541C0051DC94 /* he.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = he.m4a; sourceTree = "<group>"; };
@@ -219,9 +223,10 @@
 		527A5896190C26A2005DA746 /* ABRepeatTests */ = {
 			isa = PBXGroup;
 			children = (
+				527A5897190C26A2005DA746 /* Supporting Files */,
+				528B3CC219281BAE007F04B5 /* Sounds */,
 				52B0B5F6192714F600194FED /* NSStringNSTimeIntervalTests.m */,
 				52B0B5FA19273A3E00194FED /* SongControllerTests.m */,
-				527A5897190C26A2005DA746 /* Supporting Files */,
 			);
 			path = ABRepeatTests;
 			sourceTree = "<group>";
@@ -295,6 +300,15 @@
 				52CDFD42191D97D100FC84CA /* EasyTapButton.m */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		528B3CC219281BAE007F04B5 /* Sounds */ = {
+			isa = PBXGroup;
+			children = (
+				528B3CCC1928288F007F04B5 /* test_sound.aiff */,
+				528B3CCD1928288F007F04B5 /* test_sound.m4a */,
+			);
+			path = Sounds;
 			sourceTree = "<group>";
 		};
 		529A8DB4191250480051DC94 /* Sounds */ = {
@@ -416,7 +430,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				528B3CCF1928288F007F04B5 /* test_sound.m4a in Resources */,
 				527A589B190C26A2005DA746 /* InfoPlist.strings in Resources */,
+				528B3CCE1928288F007F04B5 /* test_sound.aiff in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
