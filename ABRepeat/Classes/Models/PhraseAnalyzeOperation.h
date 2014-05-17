@@ -21,5 +21,6 @@
 - (void)phraseAnalyzeOperationDidChangeProgress:(CGFloat)progress;
 - (void)phraseAnalyzeOperationDidFinish:(NSArray *)phraseStartTimes;
 - (void)phraseAnalyzeOperationDidError;
+- (void)phraseAnalyzeOperationDidCancel;
 
 @end

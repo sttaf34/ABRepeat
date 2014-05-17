@@ -64,6 +64,7 @@
 - (void)phraseAnalyzeOperationDidChangeProgress:(CGFloat)progress {
     [[NSOperationQueue mainQueue] addOperationWithBlock:^{
         [self.delegate songControllerCreateSongDidChangeProgress:progress];
+        NSLog(@"%f", progress);
     }];
 }
 
@@ -105,6 +106,10 @@
     [[NSOperationQueue mainQueue] addOperationWithBlock:^{
         [self.delegate songControllerCreateSongDidError];
     }];
+}
+
+- (void)phraseAnalyzeOperationDidCancel {
+
 }
 
 @end

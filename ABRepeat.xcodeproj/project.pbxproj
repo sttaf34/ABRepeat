@@ -35,6 +35,7 @@
 		529A8DBA1912541C0051DC94 /* he.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 529A8DB91912541C0051DC94 /* he.m4a */; };
 		529A8DBF191264360051DC94 /* SongViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 529A8DBE191264360051DC94 /* SongViewController.m */; };
 		529A8DC6191298320051DC94 /* SongPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 529A8DC5191298320051DC94 /* SongPlayer.m */; };
+		52B0B5F7192714F600194FED /* NSStringNSTimeIntervalTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 52B0B5F6192714F600194FED /* NSStringNSTimeIntervalTests.m */; };
 		52CDFD43191D97D100FC84CA /* EasyTapButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 52CDFD42191D97D100FC84CA /* EasyTapButton.m */; };
 		52CDFD46191DFC5E00FC84CA /* PlaylistsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 52CDFD45191DFC5E00FC84CA /* PlaylistsViewController.m */; };
 		52CDFD49191E06CD00FC84CA /* AlbumsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 52CDFD48191E06CD00FC84CA /* AlbumsViewController.m */; };
@@ -100,6 +101,7 @@
 		529A8DBE191264360051DC94 /* SongViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SongViewController.m; sourceTree = "<group>"; };
 		529A8DC4191298320051DC94 /* SongPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SongPlayer.h; sourceTree = "<group>"; };
 		529A8DC5191298320051DC94 /* SongPlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SongPlayer.m; sourceTree = "<group>"; };
+		52B0B5F6192714F600194FED /* NSStringNSTimeIntervalTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSStringNSTimeIntervalTests.m; sourceTree = "<group>"; };
 		52CDFD41191D97D100FC84CA /* EasyTapButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EasyTapButton.h; sourceTree = "<group>"; };
 		52CDFD42191D97D100FC84CA /* EasyTapButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EasyTapButton.m; sourceTree = "<group>"; };
 		52CDFD44191DFC5E00FC84CA /* PlaylistsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlaylistsViewController.h; sourceTree = "<group>"; };
@@ -218,6 +220,7 @@
 			isa = PBXGroup;
 			children = (
 				527A589C190C26A2005DA746 /* ABRepeatTests.m */,
+				52B0B5F6192714F600194FED /* NSStringNSTimeIntervalTests.m */,
 				527A5897190C26A2005DA746 /* Supporting Files */,
 			);
 			path = ABRepeatTests;
@@ -484,6 +487,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				52B0B5F7192714F600194FED /* NSStringNSTimeIntervalTests.m in Sources */,
 				527A589D190C26A2005DA746 /* ABRepeatTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

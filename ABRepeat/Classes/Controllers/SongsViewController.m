@@ -84,6 +84,7 @@
 }
 
 - (void)songControllerCreateSongDidFinish:(MPMediaItem *)mediaItem {
+    self.progressView.progress = 1.0;
     [self.progressView dismiss:YES];
     Song *song = [self.songController findSongByMediaItem:mediaItem];
     [self performSegueWithIdentifier:@"ToSong" sender:song];

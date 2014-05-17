@@ -15,7 +15,21 @@ static const NSInteger kSoundExistenceBoundary = 100;
 static const NSInteger kSoundExistenceAverageReadPackets = 100;
 static const NSInteger k1SecondResolution = kTempSoundFileSampleRate / kSoundExistenceAverageReadPackets;
 
-static const CGFloat kProgressAfterCreateTempPCM = 1.0;
+// それぞれのメソッド終了後の進行状況の値
+static const CGFloat kProgressAfterCreateTempPCM = 0.5;
+static const CGFloat kProgressAfterSoundExistenceArray = 0.9;
+static const CGFloat kProgressAfterPhraseStartTimes = 1.0;
+
+// それぞれのメソッドの進行状況通知の頻度
+static const NSInteger kProgressFrequencySoundExistenceArray = 5000;
+static const NSInteger kProgressFrequencyPhraseStartTimes = 100;
+
+typedef NS_ENUM(NSInteger, CurrentWorking) {
+    CurrentWorkingCreateTempPCM,
+    CurrentWorkingSoundExistenceArray,
+    CurrentWorkingRemoveTempFiles,
+    CurrentWorkingPhraseStartTimes,
+};
 
 @interface PhraseAnalyzeOperation ()
 
@@ -37,27 +51,35 @@ static const CGFloat kProgressAfterCreateTempPCM = 1.0;
 
 - (void)main {
     NSURL *songURL = [self.mediaItem valueForProperty:MPMediaItemPropertyAssetURL];
-    NSArray *phraseStartTime = [self phraseStartTimeOrNil:songURL];
-
-    if (phraseStartTime) {
-        [self.delegate phraseAnalyzeOperationDidFinish:phraseStartTime];
-    } else if (!phraseStartTime && !self.isCancelled) {
-        [self.delegate phraseAnalyzeOperationDidError];
-    }
-}
-
-- (NSArray *)phraseStartTimeOrNil:(NSURL *)songURL {
     NSURL *tempPCMFileURL = [self createTempPCMData:songURL];
-
-    if (!tempPCMFileURL || self.isCancelled) return nil;
+    if (!tempPCMFileURL) {
+        [self executeDelegateErrorOrCancel];
+        return;
+    }
 
     NSArray *existenceArray = [self soundExistenceArrayPer10Millisecond:tempPCMFileURL];
-    if (!existenceArray || self.isCancelled) return nil;
-
+    if (!existenceArray) {
+        [self executeDelegateErrorOrCancel];
+        return;
+    }
     [self removeTempFiles];
 
     NSArray *phraseStartTimes = [self phraseStartTimesFromSoundExistenceArray:existenceArray];
-    return phraseStartTimes;
+    if (!phraseStartTimes) {
+        [self executeDelegateErrorOrCancel];
+        return;
+    }
+    [self.delegate phraseAnalyzeOperationDidFinish:phraseStartTimes];
+}
+
+#pragma mark - Subroutine from main
+
+- (void)executeDelegateErrorOrCancel {
+    if (self.isCancelled) {
+        [self.delegate phraseAnalyzeOperationDidCancel];
+    } else {
+        [self.delegate phraseAnalyzeOperationDidError];
+    }
 }
 
 - (NSURL *)createTempPCMData:(NSURL *)songURL {
@@ -66,78 +88,45 @@ static const CGFloat kProgressAfterCreateTempPCM = 1.0;
     OSStatus error;
     ExtAudioFileRef infile, outfile = NULL;
 
-    error = ExtAudioFileOpenURL((__bridge CFURLRef)songURL, &infile);
-    if (error) goto ERROR_HANDLING;
-
-    error = ExtAudioFileSetProperty(infile,
-                                    kExtAudioFileProperty_ClientDataFormat,
-                                    sizeof(AudioStreamBasicDescription),
-                                    &outputFormat);
-    if (error) goto ERROR_HANDLING;
-
-    error = ExtAudioFileCreateWithURL((__bridge CFURLRef)tempFileURL,
-                                      kAudioFileWAVEType,
-                                      &outputFormat,
-                                      NULL,
-                                      kAudioFileFlags_EraseFile,
-                                      &outfile);
-ERROR_HANDLING:
-    if (error) {
-        NSLog(@"%s %d", __PRETTY_FUNCTION__, __LINE__);
-        ExtAudioFileDispose(infile);
-        ExtAudioFileDispose(outfile);
-        return nil;
-    }
-
+    // AudioBufferListの作成
     UInt32 readFrameSize = kTempSoundFileReadFrame;
     UInt32 bufferSize = sizeof(char) * readFrameSize * outputFormat.mBytesPerPacket;
     char *buffer = malloc(bufferSize);
-
     AudioBufferList audioBufferList;
     audioBufferList.mNumberBuffers = 1;
     audioBufferList.mBuffers[0].mNumberChannels = outputFormat.mChannelsPerFrame;
     audioBufferList.mBuffers[0].mDataByteSize = bufferSize;
     audioBufferList.mBuffers[0].mData = buffer;
 
-    // ファイル変換の途中経過を通知する用
-    // TODO: 計算式が分からないのでマジックナンバーになっているのを何とかする
-    UInt64 fileLengthFrames = 0;
-    UInt32 size = sizeof(SInt64);
-    ExtAudioFileGetProperty(infile, kExtAudioFileProperty_FileLengthFrames, &size, &fileLengthFrames);
-    UInt64 aboutLoopCount = fileLengthFrames / 4500 / 4;
+    error = ExtAudioFileOpenURL((__bridge CFURLRef)songURL, &infile);
+    if (error) goto ERROR_HANDLING;
+    error = ExtAudioFileSetProperty(infile, kExtAudioFileProperty_ClientDataFormat, sizeof(AudioStreamBasicDescription), &outputFormat);
+    if (error) goto ERROR_HANDLING;
+    error = ExtAudioFileCreateWithURL((__bridge CFURLRef)tempFileURL, kAudioFileWAVEType, &outputFormat, NULL, kAudioFileFlags_EraseFile, &outfile);
+    if (error) goto ERROR_HANDLING;
 
-    BOOL isSuccess = NO;
-    int currentLoopCount = 0;
+    NSInteger aboutMaxLoopCount = [self aboutMaxLoopCount:infile];
+    NSInteger currentLoopCount = 0;
     while (1) {
-        currentLoopCount++;
-        float progress = (float)currentLoopCount / aboutLoopCount * kProgressAfterCreateTempPCM;
-        if (progress > 1) progress = 1.0;
-        [self.delegate phraseAnalyzeOperationDidChangeProgress:progress];
-
         if (self.isCancelled) break;
+        [self executeDelegateAfterCalculateProgress:++currentLoopCount aboutMaxCount:aboutMaxLoopCount currentWorking:CurrentWorkingCreateTempPCM];
 
-        readFrameSize = kTempSoundFileReadFrame;
         error = ExtAudioFileRead(infile, &readFrameSize, &audioBufferList);
-        if (error) break;
-
-        if (readFrameSize == 0) {
-            isSuccess = YES;
-            break;
-        }
-
+        if (error) goto ERROR_HANDLING;
+        if (readFrameSize == 0) break;
         error = ExtAudioFileWrite(outfile, readFrameSize, &audioBufferList);
-        if (error) break;
+        if (error) goto ERROR_HANDLING;
     }
 
+ERROR_HANDLING:
     ExtAudioFileDispose(infile);
     ExtAudioFileDispose(outfile);
     free(buffer);
-
-    if (!isSuccess) {
-        NSLog(@"%s %d", __PRETTY_FUNCTION__, __LINE__);
+    if (error || self.isCancelled) {
         return nil;
+    } else {
+        return tempFileURL;
     }
-    return tempFileURL;
 }
 
 - (NSArray *)soundExistenceArrayPer10Millisecond:(NSURL *)PCMFileURL {
@@ -145,61 +134,43 @@ ERROR_HANDLING:
     OSStatus error;
     UInt64 packetCount = 0;
     UInt32 size = sizeof(UInt64);
-
     AudioFileID audioFileID = NULL;
-    error = AudioFileOpenURL((__bridge CFURLRef)PCMFileURL,
-                             kAudioFileReadPermission,
-                             kAudioFileWAVEType,
-                             &audioFileID);
-    if (error) goto ERROR_HANDLING;
 
-    error = AudioFileGetProperty(audioFileID,
-                                 kAudioFilePropertyAudioDataPacketCount,
-                                 &size,
-                                 &packetCount);
-    if (error) goto ERROR_HANDLING;
-
-ERROR_HANDLING:
-    if (error) {
-        NSLog(@"%s %d", __PRETTY_FUNCTION__, __LINE__);
-        AudioFileClose(audioFileID);
-        return nil;
-    }
+    error = AudioFileOpenURL((__bridge CFURLRef)PCMFileURL, kAudioFileReadPermission, kAudioFileWAVEType, &audioFileID);
+    if (error) goto ERROR_AND_CANCEL_HANDLING;
+    error = AudioFileGetProperty(audioFileID, kAudioFilePropertyAudioDataPacketCount, &size, &packetCount);
+    if (error) goto ERROR_AND_CANCEL_HANDLING;
 
     UInt32 ioNumPackets = kSoundExistenceAverageReadPackets;
     short buffer[kSoundExistenceAverageReadPackets] = {0};
+    NSLog(@"%s loopCount -> %d", __PRETTY_FUNCTION__, (int)packetCount);
     for (int i = 0; i < packetCount; i += kSoundExistenceAverageReadPackets) {
-        if (self.isCancelled) {
-            AudioFileClose(audioFileID);
-            return nil;
+        if (self.isCancelled) goto ERROR_AND_CANCEL_HANDLING;
+        if (i % kProgressFrequencySoundExistenceArray == 0) {
+            [self executeDelegateAfterCalculateProgress:i aboutMaxCount:(NSInteger)packetCount - 1
+                                         currentWorking:CurrentWorkingSoundExistenceArray];
         }
 
-        error = AudioFileReadPackets(audioFileID,
-                                     NO,
-                                     NULL,
-                                     NULL,
-                                     i,
-                                     &ioNumPackets,
-                                     &buffer);
-        if (error) {
-            NSLog(@"%s %d", __PRETTY_FUNCTION__, __LINE__);
-            AudioFileClose(audioFileID);
-            return nil;
-        }
+        error = AudioFileReadPackets(audioFileID, NO, NULL, NULL, i, &ioNumPackets, &buffer);
+        if (error) goto ERROR_AND_CANCEL_HANDLING;
 
-        // 読み込んだパケットの平均値の取得
+        // 読み込んだパケットの平均値を取得し、音が鳴っているかを判別
         int sum = 0;
         for (int j = 0; j < ioNumPackets; j++) {
             sum += abs(*(buffer + j));
         }
         int average = sum / kSoundExistenceAverageReadPackets;
-
         BOOL isSoundExistence = average > kSoundExistenceBoundary;
         [soundExistenceArray addObject:[NSNumber numberWithBool:isSoundExistence]];
     }
 
+ERROR_AND_CANCEL_HANDLING:
     AudioFileClose(audioFileID);
-    return soundExistenceArray;
+    if (error || self.isCancelled) {
+        return nil;
+    } else {
+        return soundExistenceArray;
+    }
 }
 
 - (void)removeTempFiles {
@@ -210,22 +181,29 @@ ERROR_HANDLING:
     }];
 }
 
-// TODO: 頭出しをどう判定しているかのコメントが必要
-// TODO: 頭出し判定を調整出来るようにするかもしれない
 static const NSInteger kSoundExistenceJudgeCountNO = 20;
 static const NSInteger kSoundExistenceJudgeCountYES = 10;
 
 - (NSArray *)phraseStartTimesFromSoundExistenceArray:(NSArray *)soundExistenceArray {
     NSMutableArray *phraseBeginTimes = [NSMutableArray array];
 
-    for (int i = 0; i < soundExistenceArray.count - kSoundExistenceJudgeCountNO - kSoundExistenceJudgeCountYES; i++) {
+    // soundExistenceArray[i]の値を見て
+    // NOがkSoundExistenceJudgeCountNO個、YESがkSoundExistenceJudgeCountYES個並んだ場合の時間を
+    // phraseBeginTimeとしている
+    NSInteger loopCount = soundExistenceArray.count - kSoundExistenceJudgeCountNO - kSoundExistenceJudgeCountYES;
+    NSLog(@"%s loopCount -> %d", __PRETTY_FUNCTION__, (int)loopCount);
+    for (int i = 0; i < loopCount; i++) {
         if (self.isCancelled) return nil;
+        if (i % kProgressFrequencyPhraseStartTimes == 0) {
+            [self executeDelegateAfterCalculateProgress:i aboutMaxCount:loopCount - 1
+                                         currentWorking:CurrentWorkingPhraseStartTimes];
+        }
 
         BOOL isSoundExistence = [(NSNumber *)soundExistenceArray[i] boolValue];
         if (isSoundExistence) continue;
 
+        // NOがkSoundExistenceJudgeCountNO個並んでいるかチェック
         BOOL isPhraseBeginTime = YES;
-
         for (int j = 0; j < kSoundExistenceJudgeCountNO; j++) {
             if ([(NSNumber *)soundExistenceArray[i + j] boolValue]) {
                 isPhraseBeginTime = NO;
@@ -234,6 +212,7 @@ static const NSInteger kSoundExistenceJudgeCountYES = 10;
         }
         if (!isPhraseBeginTime) continue;
 
+        // YESがkSoundExistenceJudgeCountYES個並んでいるかチェック
         for (int j = kSoundExistenceJudgeCountNO; j < kSoundExistenceJudgeCountNO + kSoundExistenceJudgeCountYES; j++) {
             if (![(NSNumber *)soundExistenceArray[i + j] boolValue]) {
                 isPhraseBeginTime = NO;
@@ -272,6 +251,33 @@ static const NSInteger kSoundExistenceJudgeCountYES = 10;
     format.mBytesPerFrame     = 2;
     format.mReserved          = 0;
     return format;
+}
+
+- (void)executeDelegateAfterCalculateProgress:(NSInteger)currentCount
+                                aboutMaxCount:(NSInteger)abountMaxCount
+                               currentWorking:(CurrentWorking)currentWorking {
+    CGFloat ratio = (CGFloat)currentCount / abountMaxCount;
+    CGFloat progress;
+    switch (currentWorking) {
+        case CurrentWorkingCreateTempPCM:
+            progress = ratio * kProgressAfterCreateTempPCM;
+            break;
+        case CurrentWorkingSoundExistenceArray:
+            progress = ratio * (kProgressAfterSoundExistenceArray - kProgressAfterCreateTempPCM) + kProgressAfterCreateTempPCM;
+            break;
+        case CurrentWorkingRemoveTempFiles:
+            break;
+        case CurrentWorkingPhraseStartTimes:
+            progress = ratio * (kProgressAfterPhraseStartTimes - kProgressAfterSoundExistenceArray) + kProgressAfterSoundExistenceArray;
+    }
+    [self.delegate phraseAnalyzeOperationDidChangeProgress:progress];
+}
+
+- (NSInteger)aboutMaxLoopCount:(ExtAudioFileRef)audioFileRef {
+    UInt64 fileLengthFrames;
+    UInt32 size = sizeof(SInt64);
+    ExtAudioFileGetProperty(audioFileRef, kExtAudioFileProperty_FileLengthFrames, &size, &fileLengthFrames);
+    return (fileLengthFrames * kTempSoundFileSampleRate / 44100.0) / kTempSoundFileReadFrame;
 }
 
 @end
